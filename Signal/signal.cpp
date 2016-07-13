@@ -2,10 +2,36 @@
 
 /* --- constructors / destructors --- */
 
-Signal::Signal(  int length_ , bool useMultiChannel_ , int channelsCount_ )
-        : vector<int>( length_ ),
-          useMultiChannel(useMultiChannel_),
-          channelsCount(channelsCount_) {}
+Signal::Signal(int  size_             ,   bool useMultiChannel_  ,
+               int  channelsCount_    ,   int selectedChannel_   ,
+               bool useCutOffToRange_ ,   int minValue_          ,
+               int  maxValue_                                    )
+    : vector<int>      ( size_             ),
+      useMultiChannel  ( useMultiChannel_  ),
+      channelsCount    ( channelsCount_    ),
+      selectedChannel  ( selectedChannel_  ),
+      useCutOffToRange ( useCutOffToRange_ ),
+      minValue         ( minValue_         ),
+      maxValue         ( maxValue_         )
+{ }
+
+
+Signal::Signal(const Signal &other_, bool copyVectorData_)
+    : vector<int>      ( other_.getSize()        ),
+      useMultiChannel  ( other_.getUseMultiChannel()  ),
+      channelsCount    ( other_.getChannelsCount()    ),
+      selectedChannel  ( other_.getSelectedChannel()  ),
+      useCutOffToRange ( other_.getUseCutOffToRange() ),
+      minValue         ( other_.getMinValue()         ),
+      maxValue         ( other_.getMaxValue()         )
+{
+    if (copyVectorData_) {
+        int size_l = other_.getSize();
+        for (int i = 0; i < size_l; i++) {
+            (*this)[i] = other_[i];
+        }
+    }
+}
 
 /* --- getters and setters --- */
 bool Signal::setSelectedChannel  (int  val_) {
@@ -28,7 +54,7 @@ bool Signal::setUseMultiChannel  (bool val_) {
 }
 
 bool Signal::setChannelsCount    (int  val_) {
-    if (size() % val_ == 0) {
+    if (getSize() % val_ == 0) {
         channelsCount = val_;
         return true;
     } else {
@@ -51,21 +77,21 @@ bool Signal::setMinMaxValue(int min_, int max_) {
 }
 
 /* --- miscellaneous --- */
-int Signal::size() const {
+int Signal::getSize() const {
     return int( vector<int>::size() );
 }
 
-int Signal::value(int val_ ) const {
-    if( size() < 1 )
+int Signal::getValueAt(int index_) const {
+    if( getSize() < 1 )
         return 0.0;
 
-    if( val_ < 0 )
+    if( index_ < 0 )
         return (*this)[ 0 ];
 
-    if( val_ > size()-1 )
-        return (*this)[ size()-1 ];
+    if( index_ > getSize()-1 )
+        return (*this)[ getSize()-1 ];
 
-    return (*this)[ val_ ];
+    return (*this)[ index_ ];
 }
 
 /*
@@ -83,9 +109,9 @@ type Signal::modifySignal(ModificationType modificationType_, type val_ ) {
 /* --- operators --- */
 
 Signal Signal::operator+( int val_ ) const {
-    Signal res( size() );
+    Signal res( getSize() );
 
-    for( int i = 0; i < size(); i++ ) {
+    for( int i = 0; i < getSize(); i++ ) {
         res[ i ] = (*this)[ i ] + val_;
     }
 
@@ -94,9 +120,9 @@ Signal Signal::operator+( int val_ ) const {
 
 
 Signal Signal::operator-( int val_) const {
-    Signal res( size() );
+    Signal res( getSize() );
 
-    for( int i = 0; i < size(); i++ ) {
+    for( int i = 0; i < getSize(); i++ ) {
         res[ i ] = (*this)[ i ] - val_;
     }
 
@@ -104,9 +130,9 @@ Signal Signal::operator-( int val_) const {
 }
 
 Signal Signal::operator*( int val_) const {
-    Signal res( size() );
+    Signal res( getSize() );
 
-    for( int i = 0; i < size(); i++ ) {
+    for( int i = 0; i < getSize(); i++ ) {
         res[ i ] = (*this)[ i ] * val_;
     }
 
@@ -114,27 +140,27 @@ Signal Signal::operator*( int val_) const {
 }
 
 Signal Signal::operator+( const Signal& val_) const {
-    if( size() != val_.size() ) {
+    if( getSize() != val_.getSize() ) {
         return *this;
     }
 
-    Signal res( size() );
+    Signal res( getSize() );
 
-    for( int i = 0; i < size(); i++ ) {
-        res[ i ] = (*this)[ i ] + val_.value(i);
+    for( int i = 0; i < getSize(); i++ ) {
+        res[ i ] = (*this)[ i ] + val_.getValueAt(i);
     }
 
     return res;
 }
 
 Signal Signal::operator-( const Signal& val_) const {
-    if( size() != val_.size() ) {
+    if( getSize() != val_.getSize() ) {
         return *this;
     }
-    Signal res( size() );
+    Signal res( getSize() );
 
-    for( int i = 0; i < size(); i++ ) {
-        res[ i ] = (*this)[ i ] - val_.value(i);
+    for( int i = 0; i < getSize(); i++ ) {
+        res[ i ] = (*this)[ i ] - val_.getValueAt(i);
     }
     return res;
 }
@@ -142,18 +168,18 @@ Signal Signal::operator-( const Signal& val_) const {
 ostream& operator<<(ostream& ostream_, const Signal signal_) {
     int channelsCount = 1;
     int selectedChannel = 0;
-    int size = signal_.size();
+    int size = signal_.getSize();
     if (signal_.getUseMultiChannel()) {
         channelsCount   = signal_.getChannelsCount();
         selectedChannel = signal_.getSelectedChannel();
-        size = signal_.size() / channelsCount;
+        size = signal_.getSize() / channelsCount;
     }
 
     ostream_ << "[";
     for (int i = 0; i < size -1; i++) {
-        ostream_ << signal_.value( i * channelsCount + selectedChannel) << ",";
+        ostream_ << signal_.getValueAt( i * channelsCount + selectedChannel) << ",";
 
     }
-    ostream_ << signal_.value((size-1) * channelsCount + selectedChannel) << "]" << endl;
+    ostream_ << signal_.getValueAt((size-1) * channelsCount + selectedChannel) << "]" << endl;
     return ostream_;
 }

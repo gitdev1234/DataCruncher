@@ -14,11 +14,18 @@ enum ModificationType {ADD, MULTIPLY};
 class Signal : public vector<int>{
     public:
         /* --- constructors / destructors --- */
-        Signal( int length_ = 0, bool multiChannelData_ = false, int channelsCount_ = 1 );
+
+        // standard - constructor
+        Signal(int  size_             =       0,   bool useMultiChannel_  =   false,
+               int  channelsCount_    =       1,   int  selectedChannel_  =       0,
+               bool useCutOffToRange_ =   false,   int  minValue_         = INT_MIN,
+               int  maxValue_         = INT_MAX                                   );
+        // copy - constructor
+        Signal(const Signal& other_, bool copyVectorData_ = true); // copy-constructor
 
         /* --- miscellaneous --- */
-        int size() const;
-        int value( int val_ ) const;
+        int getSize() const;
+        int getValueAt(int index_) const;
         template  <typename type>
         Signal modifySignal(ModificationType modificationType_, type val_ ) ;
         template  <typename type>
