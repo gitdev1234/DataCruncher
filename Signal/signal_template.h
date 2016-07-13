@@ -4,7 +4,22 @@
 #include "signal.h"
 
 template  <typename type>
-Signal Signal::modifySignal(ModificationType modificationType_, type val_ ) {
+Signal Signal::modifySignal(ModificationType modificationType_, vector<type> val_ ) {
+    // check dimensions of val_
+    if ( (modificationType_ == ModificationType::ADD_SIGNAL     ) ||
+         (modificationType_ == ModificationType::SUBTRACT_SIGNAL) ||
+         (modificationType_ == ModificationType::MULTIPLY_SIGNAL) ||
+         (modificationType_ == ModificationType::DIVIDE_SIGNAL  ) ){
+        if (int(val_.size()) != getSize()) {
+            return (*this);
+        }
+    } else {
+        if (int(val_.size()) > 1) {
+            return (*this);
+        }
+    }
+
+
     // save attributes locally, to getting them in every loop cycle
     int  channelsCount_l    = 1;
     int  selectedChannel_l  = 0;
@@ -22,10 +37,14 @@ Signal Signal::modifySignal(ModificationType modificationType_, type val_ ) {
         // modify
 
         switch (modificationType_) {
-            case ModificationType::ADD        : (*this)[ index ] = (*this)[ index ] + val_; break;
-            //case ModificationType::ADD_SIGNAL : (*this)[ index ] = (*this)[ index ] + val_[index]; break;
-            case ModificationType::MULTIPLY   : (*this)[ index ] = (*this)[ index ] * val_; break;
-            case ModificationType::DIVIDE     : (*this)[ index ] = (*this)[ index ] / val_; break;
+            case ModificationType::ADD             : (*this)[ index ] = (*this)[ index ] + val_[0]; break;
+            case ModificationType::SUBTRACT        : (*this)[ index ] = (*this)[ index ] - val_[0]; break;
+            case ModificationType::MULTIPLY        : (*this)[ index ] = (*this)[ index ] * val_[0]; break;
+            case ModificationType::DIVIDE          : (*this)[ index ] = (*this)[ index ] / val_[0]; break;
+            case ModificationType::ADD_SIGNAL      : (*this)[ index ] = (*this)[ index ] + val_[index]; break;
+            case ModificationType::SUBTRACT_SIGNAL : (*this)[ index ] = (*this)[ index ] - val_[index]; break;
+            case ModificationType::MULTIPLY_SIGNAL : (*this)[ index ] = (*this)[ index ] * val_[index]; break;
+            case ModificationType::DIVIDE_SIGNAL   : (*this)[ index ] = (*this)[ index ] / val_[index]; break;
             default : (*this)[index] = 0;
         }
 

@@ -148,50 +148,54 @@ bool Signal::operator!=( const Signal& other_) const {
 Signal Signal::operator+( int val_ ) const {
     // copy signal because operator is const
     Signal resultSignal(*this,true);
-    return resultSignal.modifySignal(ModificationType::ADD,val_);
+    vector<int> temp = {val_};
+    return resultSignal.modifySignal(ModificationType::ADD,temp);
 }
 
 
 Signal Signal::operator-( int val_) const {
-    return (*this)+(-val_);
+    // copy signal because operator is const
+    Signal resultSignal(*this,true);
+    vector<int> temp = {val_};
+    return resultSignal.modifySignal(ModificationType::SUBTRACT,temp);
 }
 
 Signal Signal::operator*( int val_) const {
     // copy signal because operator is const
     Signal resultSignal(*this,true);
-    return resultSignal.modifySignal(ModificationType::MULTIPLY,val_);
+    vector<int> temp = {val_};
+    return resultSignal.modifySignal(ModificationType::MULTIPLY,temp);
 }
 
 Signal Signal::operator/( int val_) const {
     // copy signal because operator is const
     Signal resultSignal(*this,true);
-    return resultSignal.modifySignal(ModificationType::DIVIDE,val_);
+    vector<int> temp = {val_};
+    return resultSignal.modifySignal(ModificationType::DIVIDE,temp);
 }
 
 Signal Signal::operator+( const Signal& val_) const {
-    if( getSize() != val_.getSize() ) {
-        return *this;
-    }
-
-    Signal res( getSize() );
-
-    for( int i = 0; i < getSize(); i++ ) {
-        res[ i ] = (*this)[ i ] + val_.getValueAt(i);
-    }
-
-    return res;
+    // copy signal because operator is const
+    Signal resultSignal(*this,true);
+    return resultSignal.modifySignal(ModificationType::ADD_SIGNAL,val_);
 }
 
 Signal Signal::operator-( const Signal& val_) const {
-    if( getSize() != val_.getSize() ) {
-        return *this;
-    }
-    Signal res( getSize() );
+    // copy signal because operator is const
+    Signal resultSignal(*this,true);
+    return resultSignal.modifySignal(ModificationType::SUBTRACT_SIGNAL,val_);
+}
 
-    for( int i = 0; i < getSize(); i++ ) {
-        res[ i ] = (*this)[ i ] - val_.getValueAt(i);
-    }
-    return res;
+Signal Signal::operator*( const Signal& val_) const {
+    // copy signal because operator is const
+    Signal resultSignal(*this,true);
+    return resultSignal.modifySignal(ModificationType::MULTIPLY_SIGNAL,val_);
+}
+
+Signal Signal::operator/( const Signal& val_) const {
+    // copy signal because operator is const
+    Signal resultSignal(*this,true);
+    return resultSignal.modifySignal(ModificationType::DIVIDE_SIGNAL,val_);
 }
 
 ostream& operator<<(ostream& ostream_, const Signal signal_) {

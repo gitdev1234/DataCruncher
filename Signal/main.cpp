@@ -59,33 +59,38 @@ int main() {
     cout << s;
 
     // modifying without multi-channel
-    s = s.modifySignal(ModificationType::ADD ,5);
+    vector<int> temp = {5};
+    s = s.modifySignal(ModificationType::ADD ,temp);
     cout << "--> modify without multi-channel  : signal += 5 :" << s << endl;
-    s = s.modifySignal(ModificationType::ADD ,-5);
+    temp[0] = -5;
+    s = s.modifySignal(ModificationType::SUBTRACT ,temp);
     cout << "--> modify without multi-channel  : signal -= 5 :" << s << endl;
-    s = s.modifySignal(ModificationType::MULTIPLY ,2);
+    temp[0] = 2;
+    s = s.modifySignal(ModificationType::MULTIPLY ,temp);
     cout << "--> modify without multi-channel  : signal *= 2 :" << s << endl;
-    s = s.modifySignal(ModificationType::MULTIPLY ,1.0/2.0);
+    s = s.modifySignal(ModificationType::DIVIDE ,temp);
     cout << "--> modify without multi-channel  : signal /= 2 :" << s << endl;
 
     // modifying with multi-channel
     s.setChannelsCount(3);
     s.setUseMultiChannel(true);
     s.setSelectedChannel(0);
-    s = s.modifySignal(ModificationType::ADD ,5);
+    temp[0] = 5;
+    s = s.modifySignal(ModificationType::ADD ,temp);
     cout << "--> modify with multi-channel : signal += 5, channel 0 :" << s << endl;
     s.setSelectedChannel(1);
-    s = s.modifySignal(ModificationType::ADD ,5);
+    s = s.modifySignal(ModificationType::ADD ,temp);
     cout << "--> modify with multi-channel : signal += 5, channel 1 :" << s << endl;
     s.setSelectedChannel(2);
-    s = s.modifySignal(ModificationType::ADD ,5);
+    s = s.modifySignal(ModificationType::ADD ,temp);
     cout << "--> modify with multi-channel : signal += 5, channel 2 :" << s << endl;
 
     // modify without multi-channel and min-max-range
     s.setUseCutOffToRange(true);
     s.setMinMaxValue(3, 7);
     s.setUseMultiChannel(false);
-    s = s.modifySignal(ModificationType::ADD ,-5);
+    temp[0] = -5;
+    s = s.modifySignal(ModificationType::ADD ,temp);
     cout << "--> modify without multi-channel, with min 3 and max 7 : signal -= 5 : " << s << endl;
 
     // test operators
@@ -109,5 +114,20 @@ int main() {
     cout << "test operators for multi-channel (0/3) : s = s / 3 = " << s;
     s.setUseMultiChannel(false);
     cout << "see whole vector for understanding : " << s;
+
+    // add a signal
+    Signal s2 = s + 1;
+    cout << "now we are calculationg with two signals :" << endl;
+    cout << "s : " << s;
+    cout << "s2 : " << s2;
+    Signal s3 = s + s2;
+    cout << "s3 = s + s2 = " << s3;
+    s3 = s3 - s2;
+    cout << "s3 = s3 - s2 = " << s3;
+    s3 = s * s2;
+    cout << "s3 = s * s2 = " << s3;
+    s3 = s3 / s2;
+    cout << "s3 = s3 / s2 = " << s3;
+
 }
 

@@ -8,7 +8,7 @@
 using namespace std;
 
 
-enum ModificationType {ADD, ADD_SIGNAL, MULTIPLY, DIVIDE};
+enum ModificationType {ADD, SUBTRACT, MULTIPLY, DIVIDE, ADD_SIGNAL, SUBTRACT_SIGNAL, MULTIPLY_SIGNAL, DIVIDE_SIGNAL};
 
 
 class Signal : public vector<int>{
@@ -28,7 +28,7 @@ class Signal : public vector<int>{
         int getValueAt(int index_) const;
 
         template  <typename type>
-        Signal modifySignal(ModificationType modificationType_, type val_ ) ;
+        Signal modifySignal(ModificationType modificationType_, vector<type> val_ ) ;
 
         template  <typename type>
         type cutOffToRange(type val_);
@@ -56,6 +56,8 @@ class Signal : public vector<int>{
         Signal operator/( int val_) const;
         Signal operator+( const Signal& val_) const;
         Signal operator-( const Signal& val_) const;
+        Signal operator*( const Signal& val_) const;
+        Signal operator/( const Signal& val_) const;
         friend ostream& operator<<(ostream& ostream_, const Signal signal_);
     private:
         bool useMultiChannel  = false;
