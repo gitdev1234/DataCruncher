@@ -11,6 +11,15 @@
 
 #include "signal.h"
 
+/**
+ * Signal::modifySignal
+ * @brief modifySignal iterates through all vector-data and modifies it depending on modificationType_
+ * @param modificationType_ defines how Signal shall be modified
+ * @param val_ value which shall be added, subtacted, multiplied ... with *this, if val_ is scalar use a vector with one element
+ * @return returns the new Signal-object after modification
+ * NOTE : This function encapsulates all logic for multiple channels within the data
+ *        and for cutting data to the range of minValue and maxValue
+ */
 template  <typename type>
 Signal Signal::modifySignal(ModificationType modificationType_, vector<type> val_ ) {
     // check dimensions of val_

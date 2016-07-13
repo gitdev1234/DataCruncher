@@ -86,3 +86,6 @@ class Signal : public vector<int>{
 };
 
 #endif // SIGNAL_H
+
+'
+4'
