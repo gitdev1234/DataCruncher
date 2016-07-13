@@ -103,9 +103,9 @@ Signal& Signal::operator=( const Signal& other_) {
     }
 
     // copy attributes
-    (*this) = Signal( other_.getSize(),            other_.getUseMultiChannel()  ,other_.getChannelsCount(),
-                      other_.getSelectedChannel(), other_.getUseCutOffToRange() ,other_.getMinValue()     ,
-                      other_.getMaxValue()         );
+    Signal( other_.getSize(),            other_.getUseMultiChannel()  ,other_.getChannelsCount(),
+                   other_.getSelectedChannel(), other_.getUseCutOffToRange() ,other_.getMinValue()     ,
+                   other_.getMaxValue()         );
 
     // copy vector-data
     int size_l = other_.getSize();
@@ -146,13 +146,9 @@ bool Signal::operator!=( const Signal& other_) const {
 }
 
 Signal Signal::operator+( int val_ ) const {
-    Signal res( getSize() );
-
-    for( int i = 0; i < getSize(); i++ ) {
-        res[ i ] = (*this)[ i ] + val_;
-    }
-
-    return res;
+    // copy signal
+    Signal resultSignal(*this,true);
+    return resultSignal.modifySignal(ModificationType::ADD,val_);
 }
 
 

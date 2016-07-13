@@ -7,12 +7,13 @@ template  <typename type>
 Signal Signal::modifySignal(ModificationType modificationType_, type val_ ) {
 
     // copy all attributes except for vector data
-    Signal res( (*this).size() );
-    res.setChannelsCount    ( (*this).getChannelsCount()   );
+    Signal res((*this),false);
+  /*  res.setChannelsCount    ( (*this).getChannelsCount()   );
     res.setSelectedChannel  ( (*this).getSelectedChannel() );
     res.setUseMultiChannel  ( (*this).getUseMultiChannel() );
     res.setUseCutOffToRange ( (*this).getUseCutOffToRange());
     res.setMinMaxValue      ( (*this).getMinValue(),(*this).getMaxValue());
+*/
 
     // save attributes locally, to getting them in every loop cycle
     int  channelsCount_l    = 1;
