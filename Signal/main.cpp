@@ -86,10 +86,10 @@ int main() {
     s.setMinMaxValue(3, 7);
     s.setUseMultiChannel(false);
     s = s.modifySignal(ModificationType::ADD ,-5);
-    cout << "--> modify without multi-channel, with min 2 and max 7 : signal -= 5 : " << s << endl;
+    cout << "--> modify without multi-channel, with min 3 and max 7 : signal -= 5 : " << s << endl;
 
     // test operators
     s.setUseCutOffToRange(false);
     s = s + 3;
-    cout << "test operators" << s;
+    cout << "test operators : s = s + 3 = " << s;
 }

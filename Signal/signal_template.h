@@ -5,10 +5,10 @@
 
 template  <typename type>
 Signal Signal::modifySignal(ModificationType modificationType_, type val_ ) {
-
+/*
     // copy all attributes except for vector data
     Signal res((*this),false);
-  /*  res.setChannelsCount    ( (*this).getChannelsCount()   );
+    res.setChannelsCount    ( (*this).getChannelsCount()   );
     res.setSelectedChannel  ( (*this).getSelectedChannel() );
     res.setUseMultiChannel  ( (*this).getUseMultiChannel() );
     res.setUseCutOffToRange ( (*this).getUseCutOffToRange());
@@ -18,11 +18,12 @@ Signal Signal::modifySignal(ModificationType modificationType_, type val_ ) {
     // save attributes locally, to getting them in every loop cycle
     int  channelsCount_l    = 1;
     int  selectedChannel_l  = 0;
-    int  size_l             = res.size();
-    bool useCutOffToRange_l = res.getUseCutOffToRange();
+    int  size_l             = size();
+    bool useCutOffToRange_l = getUseCutOffToRange();
     if (getUseMultiChannel()) {
-        channelsCount_l    = res.getChannelsCount();
-        selectedChannel_l  = res.getSelectedChannel();
+        channelsCount_l    = getChannelsCount();
+        selectedChannel_l  = getSelectedChannel();
+        size_l             = size_l / channelsCount_l;
     }
 
     //TODO Bug :
@@ -32,23 +33,21 @@ Signal Signal::modifySignal(ModificationType modificationType_, type val_ ) {
 
     // iterate through all data
     for( int i = 0; i < size_l; i++ ) {
-
+        int index = i*channelsCount_l + selectedChannel_l;
         // modify
-        if (i % channelsCount_l == selectedChannel_l ) {
-            switch (modificationType_) {
-                case ModificationType::ADD      : res[ i ] = (*this)[ i ] + val_; break;
-                case ModificationType::MULTIPLY : res[ i ] = (*this)[ i ] * val_; break;
-                default : res[i] = 0;
-            }
-        } else {
-            res[ i ] = (*this)[ i ];
+
+        switch (modificationType_) {
+            case ModificationType::ADD      : (*this)[ index ] = (*this)[ index ] + val_; break;
+            case ModificationType::MULTIPLY : (*this)[ index ] = (*this)[ index ] * val_; break;
+            default : (*this)[index] = 0;
         }
+
         if (useCutOffToRange_l) {
-            res[ i ] = res.cutOffToRange(res[ i ]);
+            (*this)[ index ] = cutOffToRange((*this)[ index ]);
         }
     }
 
-    return res;
+    return (*this);
 
 }
 
