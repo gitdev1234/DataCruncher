@@ -146,30 +146,26 @@ bool Signal::operator!=( const Signal& other_) const {
 }
 
 Signal Signal::operator+( int val_ ) const {
-    // copy signal
+    // copy signal because operator is const
     Signal resultSignal(*this,true);
     return resultSignal.modifySignal(ModificationType::ADD,val_);
 }
 
 
 Signal Signal::operator-( int val_) const {
-    Signal res( getSize() );
-
-    for( int i = 0; i < getSize(); i++ ) {
-        res[ i ] = (*this)[ i ] - val_;
-    }
-
-    return res;
+    return (*this)+(-val_);
 }
 
 Signal Signal::operator*( int val_) const {
-    Signal res( getSize() );
+    // copy signal because operator is const
+    Signal resultSignal(*this,true);
+    return resultSignal.modifySignal(ModificationType::MULTIPLY,val_);
+}
 
-    for( int i = 0; i < getSize(); i++ ) {
-        res[ i ] = (*this)[ i ] * val_;
-    }
-
-    return res;
+Signal Signal::operator/( int val_) const {
+    // copy signal because operator is const
+    Signal resultSignal(*this,true);
+    return resultSignal.modifySignal(ModificationType::DIVIDE,val_);
 }
 
 Signal Signal::operator+( const Signal& val_) const {

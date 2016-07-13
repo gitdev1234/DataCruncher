@@ -89,7 +89,25 @@ int main() {
     cout << "--> modify without multi-channel, with min 3 and max 7 : signal -= 5 : " << s << endl;
 
     // test operators
+    cout << "disabled cut off" << endl;
     s.setUseCutOffToRange(false);
     s = s + 3;
     cout << "test operators : s = s + 3 = " << s;
+    s.setUseMultiChannel(true);
+    s.setSelectedChannel(0);
+    s = s - 3;
+    cout << "test operators for multi-channel (0/3) : s = s - 3 = " << s;
+    s.setUseMultiChannel(false);
+    cout << "see whole vector for understanding : " << s;
+
+    s.setUseCutOffToRange(false);
+    s = s * 3;
+    cout << "test operators : s = s * 3 = " << s;
+    s.setUseMultiChannel(true);
+    s.setSelectedChannel(0);
+    s = s / 3;
+    cout << "test operators for multi-channel (0/3) : s = s / 3 = " << s;
+    s.setUseMultiChannel(false);
+    cout << "see whole vector for understanding : " << s;
 }
+

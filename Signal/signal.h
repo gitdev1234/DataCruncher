@@ -8,7 +8,7 @@
 using namespace std;
 
 
-enum ModificationType {ADD, MULTIPLY};
+enum ModificationType {ADD, ADD_SIGNAL, MULTIPLY, DIVIDE};
 
 
 class Signal : public vector<int>{
@@ -53,6 +53,7 @@ class Signal : public vector<int>{
         Signal operator+( int val_) const;
         Signal operator-( int val_) const;
         Signal operator*( int val_) const;
+        Signal operator/( int val_) const;
         Signal operator+( const Signal& val_) const;
         Signal operator-( const Signal& val_) const;
         friend ostream& operator<<(ostream& ostream_, const Signal signal_);
