@@ -24,10 +24,12 @@ class Signal : public vector<int>{
         Signal(const Signal& other_, bool copyVectorData_ = true); // copy-constructor
 
         /* --- miscellaneous --- */
-        int getSize() const;
+        int getSize   ()           const;
         int getValueAt(int index_) const;
+
         template  <typename type>
         Signal modifySignal(ModificationType modificationType_, type val_ ) ;
+
         template  <typename type>
         type cutOffToRange(type val_);
 
@@ -45,6 +47,9 @@ class Signal : public vector<int>{
         bool setMinMaxValue      (int  min_, int max_);
 
         /* --- operators --- */
+        Signal& operator=( const Signal& other_);
+        bool   operator==( const Signal& other_) const;
+        bool   operator!=( const Signal& other_) const;
         Signal operator+( int val_) const;
         Signal operator-( int val_) const;
         Signal operator*( int val_) const;

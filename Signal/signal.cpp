@@ -94,19 +94,56 @@ int Signal::getValueAt(int index_) const {
     return (*this)[ index_ ];
 }
 
-/*
-template  <typename type>
-type Signal::modifySignal(ModificationType modificationType_, type val_ ) {
-    int i = 10;
-    switch (modificationType_) {
-        ADD : i += val_; break;
-        MULTIPLY : i *= val_; break;
-    }
-    type T;
-    return T;
-} */
-
 /* --- operators --- */
+
+Signal& Signal::operator=( const Signal& other_) {
+    // proof for identical address
+    if (this == &other_) {
+        return (*this);
+    }
+
+    // copy attributes
+    (*this) = Signal( other_.getSize(),            other_.getUseMultiChannel()  ,other_.getChannelsCount(),
+                      other_.getSelectedChannel(), other_.getUseCutOffToRange() ,other_.getMinValue()     ,
+                      other_.getMaxValue()         );
+
+    // copy vector-data
+    int size_l = other_.getSize();
+    for (int i = 0; i < size_l; i++) {
+        (*this)[i] = other_[i];
+    }
+
+    return *this;
+
+}
+
+bool Signal::operator==( const Signal& other_) const {
+    // check if attributes are identical
+    bool isIdentical = ( getSize             () == other_.getSize             () &&
+                         getUseMultiChannel  () == other_.getUseMultiChannel  () &&
+                         getChannelsCount    () == other_.getChannelsCount    () &&
+                         getSelectedChannel  () == other_.getSelectedChannel  () &&
+                         getUseCutOffToRange () == other_.getUseCutOffToRange () &&
+                         getMinValue         () == other_.getMinValue         () &&
+                         getMaxValue         () == other_.getMaxValue         () );
+
+    // check if vector-data is identical
+    if (isIdentical) {
+        int size_l = getSize();
+        for (int i = 0; i < size_l; i++) {
+            if ((*this)[i] != other_[i]) {
+                isIdentical = false;
+            }
+        }
+    }
+
+    return isIdentical;
+}
+
+bool Signal::operator!=( const Signal& other_) const {
+    // check if identical and return the invers
+    return (!((*this == other_)));
+}
 
 Signal Signal::operator+( int val_ ) const {
     Signal res( getSize() );
