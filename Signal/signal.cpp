@@ -1,3 +1,11 @@
+/**
+ * signal.cpp
+ * Purpose: implements class Signal
+ *
+ * @author Wall.Of.Death
+ * @version 1.0 20160713
+ */
+
 #include "signal.h"
 
 /* --- constructors / destructors --- */

@@ -1,3 +1,11 @@
+/**
+ * signal.h
+ * Purpose: defines class Signal and enum ModificationType
+ *
+ * @author Wall.Of.Death
+ * @version 1.0 20160713
+ */
+
 #ifndef SIGNAL_H
 #define SIGNAL_H
 
@@ -7,10 +15,19 @@
 
 using namespace std;
 
-
+/**
+ * @brief The ModificationType enum
+ * defines types of basis mathematical operations
+ * this is needed for the implementation of Signal::modifySignal
+ * and the implementation of mathematical operators
+ */
 enum ModificationType {ADD, SUBTRACT, MULTIPLY, DIVIDE, ADD_SIGNAL, SUBTRACT_SIGNAL, MULTIPLY_SIGNAL, DIVIDE_SIGNAL};
 
-
+/**
+ * class signal
+ * @brief class inherited from std::vector which is for basic calculations on
+ *
+ */
 class Signal : public vector<int>{
     public:
         /* --- constructors / destructors --- */
@@ -47,17 +64,17 @@ class Signal : public vector<int>{
         bool setMinMaxValue      (int  min_, int max_);
 
         /* --- operators --- */
-        Signal& operator=( const Signal& other_);
-        bool   operator==( const Signal& other_) const;
-        bool   operator!=( const Signal& other_) const;
-        Signal operator+( int val_) const;
-        Signal operator-( int val_) const;
-        Signal operator*( int val_) const;
-        Signal operator/( int val_) const;
-        Signal operator+( const Signal& val_) const;
-        Signal operator-( const Signal& val_) const;
-        Signal operator*( const Signal& val_) const;
-        Signal operator/( const Signal& val_) const;
+        Signal& operator=(const Signal& other_);
+        bool   operator==(const Signal& other_) const;
+        bool   operator!=(const Signal& other_) const;
+        Signal operator+(int val_) const;
+        Signal operator-(int val_) const;
+        Signal operator*(int val_) const;
+        Signal operator/(int val_) const;
+        Signal operator+(const Signal& val_) const;
+        Signal operator-(const Signal& val_) const;
+        Signal operator*(const Signal& val_) const;
+        Signal operator/(const Signal& val_) const;
         friend ostream& operator<<(ostream& ostream_, const Signal signal_);
     private:
         bool useMultiChannel  = false;
@@ -66,8 +83,6 @@ class Signal : public vector<int>{
         bool useCutOffToRange = false;
         int  minValue         = INT_MIN;
         int  maxValue         = INT_MAX;
-
-
 };
 
 #endif // SIGNAL_H

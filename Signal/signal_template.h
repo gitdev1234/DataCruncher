@@ -1,3 +1,11 @@
+/**
+ * signal_template.h
+ * Purpose: implements template functions of class Signal
+ *
+ * @author Wall.Of.Death
+ * @version 1.0 20160713
+ */
+
 #ifndef SIGNAL_TEMPLATE_H
 #define SIGNAL_TEMPLATE_H
 
