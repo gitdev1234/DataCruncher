@@ -99,7 +99,7 @@ TEST_CASE("checking equality of two signalProcessors") {
         REQUIRE(s != s2);
     }
 
-    SECTION("not identical because of data") {
+     SECTION("not identical because of data") {
         s[3] = 400;
         REQUIRE_FALSE(s == s2);
         REQUIRE(s != s2);
@@ -160,6 +160,18 @@ TEST_CASE( "outputting, analyzing and modifying a signalprocessor", "[signalproc
                 sstr2 << s;
                 REQUIRE( sstr2.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
             }
+            /*
+            SECTION ("MOVING_AVERAGE works") {
+                temp[0] = 3; // neighbourhoodCount
+                s = s.modifySignalProcessor(ModificationType::MOVING_AVERAGE,temp);
+                sstr << s;
+                REQUIRE( sstr.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
+                s[5] = 15;
+                s = s.modifySignalProcessor(ModificationType::MOVING_AVERAGE,temp);
+                sstr2 << s;
+                REQUIRE( sstr2.str() == "[0,1,2,7,8,9,6,7,8,9]\n");
+            }
+            */
 
         }
 

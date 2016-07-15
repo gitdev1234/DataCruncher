@@ -161,16 +161,42 @@ int SignalProcessor::getSize() const {
  * NOTE : returns 0 if vector has no elements
  */
 int SignalProcessor::getValueAt(int index_) const {
-    if( getSize() < 1 )
+    if( getSize() < 1 ) {
         return 0;
+    }
 
-    if( index_ < 0 )
-        return (*this)[ 0 ];
+    if (getUseMultiChannel()) {
+        int size_l = getSize()/getChannelsCount();
+        if( index_ < 0 ) {
+            return (*this)[ 0  + getSelectedChannel()];
+        }
+        if( index_ > size_l-1 ) {
+            return (*this)[ size_l * getChannelsCount() + getSelectedChannel() ];
+        }
+        return (*this)[ index_ * getChannelsCount() + getSelectedChannel() ];
+    } else {
+        if( index_ < 0 ) {
+            return (*this)[ 0 ];
+        }
+        if( index_ > getSize()-1 ) {
+            return (*this)[ getSize()-1 ];
+        }
+        return (*this)[ index_ ];
+    }
+}
 
-    if( index_ > getSize()-1 )
-        return (*this)[ getSize()-1 ];
-
-    return (*this)[ index_ ];
+int SignalProcessor::movingAverage(int index_, int neighbourhoodCount_, int channelsCount_, int selectedChannel_) {
+    if (neighbourhoodCount_ == 0) {
+        index_ = index_ * channelsCount_ + selectedChannel_;
+        return getValueAt( index_ );
+    } else {
+        int sum = 0;
+        for( int j = 0; j < neighbourhoodCount_; j++ ) {
+            sum += getValueAt( index_ - neighbourhoodCount_ / 2 + j );
+        }
+        double temp = double(sum) / double(neighbourhoodCount_);
+        return round(temp);
+    }
 }
 
 vector<double> SignalProcessor::analyzeSignalProcessor(AnalyzationType analyzationType_) {
@@ -452,7 +478,7 @@ SignalProcessor SignalProcessor::operator/( const SignalProcessor& val_) const {
  * [1,2,4,5,100]
  */
 ostream& operator<<(ostream& ostream_, const SignalProcessor signalProcessor_) {
-    int channelsCount = 1;
+    /*int channelsCount = 1;
     int selectedChannel = 0;
     int size = signalProcessor_.getSize();
     if (signalProcessor_.getUseMultiChannel()) {
@@ -467,6 +493,22 @@ ostream& operator<<(ostream& ostream_, const SignalProcessor signalProcessor_) {
 
     }
     ostream_ << signalProcessor_.getValueAt((size-1) * channelsCount + selectedChannel) << "]" << endl;
+    return ostream_;*/
+    int channelsCount = 1;
+    int selectedChannel = 0;
+    int size = signalProcessor_.getSize();
+    if (signalProcessor_.getUseMultiChannel()) {
+        channelsCount   = signalProcessor_.getChannelsCount();
+        selectedChannel = signalProcessor_.getSelectedChannel();
+        size = signalProcessor_.getSize() / channelsCount;
+    }
+
+    ostream_ << "[";
+    for (int i = 0; i < size -1; i++) {
+        ostream_ << signalProcessor_.getValueAt( i ) << ",";
+
+    }
+    ostream_ << signalProcessor_.getValueAt((size-1)) << "]" << endl;
     return ostream_;
 }
 
@@ -474,7 +516,6 @@ ostream& operator<<(ostream& ostream_, vector<double> val_) {
     ostream_ << "[";
     for (unsigned int i = 0; i < val_.size() -1; i++) {
         ostream_ << val_[i] << ",";
-
     }
     ostream_ << val_[val_.size()-1] << "]" << endl;
     return ostream_;

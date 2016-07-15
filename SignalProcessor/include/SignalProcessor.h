@@ -22,7 +22,9 @@ using namespace std;
  * this is needed for the implementation of SignalProcessor::modifySignalProcessor
  * and the implementation of mathematical operators
  */
-enum ModificationType {ADD, SUBTRACT, MULTIPLY, DIVIDE, ADD_SIGNALPROCESSOR, SUBTRACT_SIGNALPROCESSOR, MULTIPLY_SIGNALPROCESSOR, DIVIDE_SIGNALPROCESSOR};
+enum ModificationType {ADD, SUBTRACT, MULTIPLY, DIVIDE, ADD_SIGNALPROCESSOR,
+                       SUBTRACT_SIGNALPROCESSOR, MULTIPLY_SIGNALPROCESSOR,
+                       DIVIDE_SIGNALPROCESSOR, MOVING_AVERAGE};
 
 /**
  * @brief The AnalyzationType enum
@@ -91,6 +93,7 @@ class SignalProcessor : public vector<int>{
         SignalProcessor modifySignalProcessor(ModificationType modificationType_, vector<type> val_ ) ;
         template  <typename type>
         type cutOffToRange(type val_);
+        int movingAverage(int indexWithMultiChannel_, int neighbourhoodCount, int channelsCount_, int selectedChannel_);
 
         vector<double> analyzeSignalProcessor(AnalyzationType analyzationType_) ;
 

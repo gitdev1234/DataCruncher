@@ -70,6 +70,7 @@ SignalProcessor SignalProcessor::modifySignalProcessor(ModificationType modifica
                                                                } else {
                                                                   (*this)[ index ] = (*this)[ index ] / val_[index]; break;
                                                                }; break;
+            case ModificationType::MOVING_AVERAGE           : (*this)[ index ] = movingAverage(index,val_[0],channelsCount_l,selectedChannel_l); break;
 
             default : (*this)[index] = 0;
         }
