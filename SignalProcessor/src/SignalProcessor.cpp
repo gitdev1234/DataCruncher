@@ -140,7 +140,8 @@ SignalProcessor SignalProcessor::modifySignalProcessor(ModificationType modifica
     }
 
     SignalProcessor copyBeforeModification;
-    if (modificationType_ == ModificationType::MOVING_AVERAGE) {
+    if ( (modificationType_ == ModificationType::MOVING_AVERAGE) ||
+         (modificationType_ == ModificationType::GRADIENT      ) ){
         copyBeforeModification = (*this);
     }
 
@@ -194,6 +195,10 @@ SignalProcessor SignalProcessor::modifySignalProcessor(ModificationType modifica
 
                     (*this)[i] = round(double(sum) / double( val_[0] ) );
                 } break;
+        case ModificationType::GRADIENT :  {
+            int sum = copyBeforeModification.getValueAt( i + 1) - copyBeforeModification.getValueAt( i - 1);
+            (*this)[i] = round(double(sum) / double( 2 ) );
+        } break;
 
             default : (*this)[i] = 0;
         }

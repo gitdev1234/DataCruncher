@@ -25,7 +25,7 @@ using namespace std;
 enum ModificationType {ADD, SUBTRACT, MULTIPLY, DIVIDE, ADD_SIGNALPROCESSOR,
                        SUBTRACT_SIGNALPROCESSOR, MULTIPLY_SIGNALPROCESSOR,
                        DIVIDE_SIGNALPROCESSOR, THRESHOLD, BINARY_THRESHOLD,
-                       MOVING_AVERAGE};
+                       MOVING_AVERAGE, GRADIENT};
 
 /**
  * @brief The AnalyzationType enum
@@ -89,7 +89,7 @@ class SignalProcessor : public vector<int>{
         int getValueAt(int index_) const;
 
         double analyzeSignalProcessor(AnalyzationType analyzationType_) ;
-        SignalProcessor modifySignalProcessor(ModificationType modificationType_, vector<int> val_ );
+        SignalProcessor modifySignalProcessor(ModificationType modificationType_, vector<int> val_ = {0} );
         int cutOffToRange(int val_);
 
         /* --- getter / setter --- */

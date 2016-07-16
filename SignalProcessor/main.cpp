@@ -166,6 +166,17 @@ TEST_CASE( "outputting, analyzing and modifying a signalprocessor", "[signalproc
                 sstr2 << s;
                 REQUIRE( sstr2.str() == "[0,1,2,3,4,8,9,10,8,9]\n");
             }
+            SECTION ("GRADIENT works") {
+                s = s.modifySignalProcessor(ModificationType::GRADIENT);
+                sstr << s;
+                REQUIRE( sstr.str() == "[1,1,1,1,1,1,1,1,1,1]\n");
+            }
+            SECTION ("GRADIENT works") {
+                s[6] = 15;
+                s = s.modifySignalProcessor(ModificationType::GRADIENT);
+                sstr << s;
+                REQUIRE( sstr.str() == "[1,1,1,1,1,6,1,-4,1,1]\n");
+            }
 
 
         }
