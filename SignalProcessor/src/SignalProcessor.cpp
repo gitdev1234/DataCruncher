@@ -7,7 +7,6 @@
  */
 
 #include "../include/SignalProcessor.h"
-#include "../include/SignalProcessor_template.h"
 
 /* --- constructors / destructors --- */
 
@@ -15,9 +14,6 @@
  * SignalProcessor::SignalProcessor
  * @brief standard constructor of class SignalProcessor
  * @param size_             size of vector
- * @param useMultiChannel_  true if data consists of more than one channel
- * @param channelsCount_    the number of channels within the data
- * @param selectedChannel_  the index of the currently selected channel, first channel index is 0
  * @param useCutOffToRange_ true if data is cut to minimum and maximum value during a modifySignalProcessor
  * @param minValue_         minimum value, needed for cutting data during modifySignalProcessor
  * @param maxValue_         maximum value, needed for cutting data during modifySignalProcessor
@@ -25,14 +21,9 @@
  * creates vector of size 'size_' and initializes attributes
  *
  */
-SignalProcessor::SignalProcessor(int  size_             ,   bool useMultiChannel_  ,
-                                 int  channelsCount_    ,   int selectedChannel_   ,
-                                 bool useCutOffToRange_ ,   int minValue_          ,
-                                 int  maxValue_                                    )
+SignalProcessor::SignalProcessor(int size_     , bool useCutOffToRange_ ,
+                                 int minValue_ , int maxValue_           )
     : vector<int>      ( size_             ),
-      useMultiChannel  ( useMultiChannel_  ),
-      channelsCount    ( channelsCount_    ),
-      selectedChannel  ( selectedChannel_  ),
       useCutOffToRange ( useCutOffToRange_ ),
       minValue         ( minValue_         ),
       maxValue         ( maxValue_         )
@@ -46,9 +37,6 @@ SignalProcessor::SignalProcessor(int  size_             ,   bool useMultiChannel
  */
 SignalProcessor::SignalProcessor(const SignalProcessor &other_, bool copyVectorData_)
     : vector<int>      ( other_.getSize()        ),
-      useMultiChannel  ( other_.getUseMultiChannel()  ),
-      channelsCount    ( other_.getChannelsCount()    ),
-      selectedChannel  ( other_.getSelectedChannel()  ),
       useCutOffToRange ( other_.getUseCutOffToRange() ),
       minValue         ( other_.getMinValue()         ),
       maxValue         ( other_.getMaxValue()         )
@@ -62,56 +50,6 @@ SignalProcessor::SignalProcessor(const SignalProcessor &other_, bool copyVectorD
 }
 
 /* --- getters and setters --- */
-/**
- * SignalProcessor::setSelectedChannel
- * @brief setter of selectedChannel
- * @param val_ index of channel to select
- * @return returns true if setting channel is allowed, otherwise false
- */
-bool SignalProcessor::setSelectedChannel  (int  val_) {
-    if ( (val_ <= getChannelsCount() - 1) && (val_ >= 0) ) {
-        selectedChannel  = val_;
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * SignalProcessor::setUseMultiChannel
- * @brief setter of useMultiChannel
- * @param val_ true if all functions shall interpret the vector as multi-channel-data
- * @return returns true if it is possible to interpret data as multi channel, otherwise false
- */
-bool SignalProcessor::setUseMultiChannel  (bool val_) {
-    if (getChannelsCount() > 1) {
-        useMultiChannel = val_;
-        return true;
-    } else {
-        useMultiChannel = false;
-        return false;
-    }
-}
-
-/**
- * SignalProcessor::setChannelsCount
- * @brief setter of channelsCount
- * @param val_ number of channels within the data
- * @return returns true if it is possible to interpret data as data with 'val_' channels, otherwise false
- */
-bool SignalProcessor::setChannelsCount    (int  val_) {
-    if (val_ == 0)  {
-        setUseMultiChannel(false);
-        setSelectedChannel(0);
-        channelsCount = val_;
-
-    } else if (getSize() % val_ == 0) {
-        channelsCount = val_;
-        return true;
-    } else {
-        return false;
-    }
-}
 
 /**
  * SignalProcessor::setUseCutOffToRange
@@ -161,102 +99,130 @@ int SignalProcessor::getSize() const {
  * NOTE : returns 0 if vector has no elements
  */
 int SignalProcessor::getValueAt(int index_) const {
-    if( getSize() < 1 ) {
+    int size_l = getSize();
+    if( size_l  < 1 ) {
         return 0;
     }
 
-    if (getUseMultiChannel()) {
-        int size_l = getSize()/getChannelsCount();
-        if( index_ < 0 ) {
-            return (*this)[ 0  + getSelectedChannel()];
-        }
-        if( index_ > size_l-1 ) {
-            return (*this)[ size_l * getChannelsCount() + getSelectedChannel() ];
-        }
-        return (*this)[ index_ * getChannelsCount() + getSelectedChannel() ];
-    } else {
-        if( index_ < 0 ) {
-            return (*this)[ 0 ];
-        }
-        if( index_ > getSize()-1 ) {
-            return (*this)[ getSize()-1 ];
-        }
-        return (*this)[ index_ ];
+    if( index_ < 0 ) {
+        return (*this)[ 0 ];
     }
+    if( index_ > size_l-1 ) {
+        return (*this)[ size_l - 1 ];
+    }
+    return (*this)[ index_ ];
+
 }
 
-int SignalProcessor::movingAverage(int index_, int neighbourhoodCount_, int channelsCount_, int selectedChannel_) {
-    if (neighbourhoodCount_ == 0) {
-        index_ = index_ * channelsCount_ + selectedChannel_;
-        return getValueAt( index_ );
-    } else {
-        int sum = 0;
-        for( int j = 0; j < neighbourhoodCount_; j++ ) {
-            sum += getValueAt( index_ - neighbourhoodCount_ / 2 + j );
-        }
-        double temp = double(sum) / double(neighbourhoodCount_);
-        return round(temp);
-    }
-}
 
-vector<double> SignalProcessor::analyzeSignalProcessor(AnalyzationType analyzationType_) {
-    // save attributes locally, to getting them in every loop cycle
-    int  channelsCount_l    = 1;
-    int  selectedChannel_l  = 0;
+/**
+ * SignalProcessor::modifySignalProcessor
+ * @brief modifySignalProcessor iterates through all vector-data and modifies it depending on modificationType_
+ * @param modificationType_ defines how SignalProcessor shall be modified
+ * @param val_ value which shall be added, subtacted, multiplied ... with *this, if val_ is scalar use a vector with one element
+ * @return returns the new SignalProcessor-object after modification
+ * NOTE : This function encapsulates all logic for multiple channels within the data
+ *        and for cutting data to the range of minValue and maxValue
+ */
+SignalProcessor SignalProcessor::modifySignalProcessor(ModificationType modificationType_, vector<int> val_ ) {
+    // check dimensions of val_
+    if ( (modificationType_ == ModificationType::ADD_SIGNALPROCESSOR     ) ||
+         (modificationType_ == ModificationType::SUBTRACT_SIGNALPROCESSOR) ||
+         (modificationType_ == ModificationType::MULTIPLY_SIGNALPROCESSOR) ||
+         (modificationType_ == ModificationType::DIVIDE_SIGNALPROCESSOR  ) ){
+        if (int(val_.size()) != getSize()) {
+            return (*this);
+        }
+    } else {
+        if (int(val_.size()) > 1) {
+            return (*this);
+        }
+    }
+
+
     int  size_l             = size();
+    bool useCutOffToRange_l = getUseCutOffToRange();
 
-    vector<double> result_l(1);
-    vector<double> average_l;
+    // iterate through all data
+    for( int i = 0; i < size_l; i++ ) {
+        // modify
+
+        switch (modificationType_) {
+            case ModificationType::ADD             : (*this)[ i ] = (*this)[ i ] + val_[0]; break;
+            case ModificationType::SUBTRACT        : (*this)[ i ] = (*this)[ i ] - val_[0]; break;
+            case ModificationType::MULTIPLY        : (*this)[ i ] = (*this)[ i ] * val_[0]; break;
+            case ModificationType::DIVIDE          : if (val_[0] == 0) {
+                                                        (*this)[ i ] = 0;
+                                                     } else {
+                                                        (*this)[ i ] = (*this)[ i ] / val_[0]; break;
+                                                     }; break;
+            case ModificationType::ADD_SIGNALPROCESSOR      : (*this)[ i ] = (*this)[ i ] + val_[i]; break;
+            case ModificationType::SUBTRACT_SIGNALPROCESSOR : (*this)[ i ] = (*this)[ i ] - val_[i]; break;
+            case ModificationType::MULTIPLY_SIGNALPROCESSOR : (*this)[ i ] = (*this)[ i ] * val_[i]; break;
+            case ModificationType::DIVIDE_SIGNALPROCESSOR   :  if (val_[i] == 0) {
+                                                                  (*this)[ i ] = 0;
+                                                               } else {
+                                                                  (*this)[ i ] = (*this)[ i ] / val_[i]; break;
+                                                               }; break;
+
+            default : (*this)[i] = 0;
+        }
+
+        if (useCutOffToRange_l) {
+            (*this)[ i ] = cutOffToRange((*this)[ i ]);
+        }
+    }
+
+    return (*this);
+
+}
+
+int SignalProcessor::cutOffToRange(int val_) {
+    int min = getMinValue();
+    int max = getMaxValue();
+    if (val_ < min) {
+        val_ = min;
+    } else if (val_ > max) {
+        val_ = max;
+    }
+    return val_;
+}
+
+double SignalProcessor::analyzeSignalProcessor(AnalyzationType analyzationType_) {
+    double result_l(1);
+    double average_l;
+    int size_l = getSize();
 
     switch (analyzationType_) {
-        case AnalyzationType::MINIMUM       : result_l[0] = INT_MAX; break;
-        case AnalyzationType::MAXIMUM       : result_l[0] = INT_MIN; break;
-        case AnalyzationType::AVERAGE       : result_l[0] =       0; break;
+        case AnalyzationType::MINIMUM       : result_l = INT_MAX; break;
+        case AnalyzationType::MAXIMUM       : result_l = INT_MIN; break;
+        case AnalyzationType::AVERAGE       : result_l =       0; break;
         case AnalyzationType::STD_DEVIATION : {   average_l = analyzeSignalProcessor(AnalyzationType::AVERAGE);
-                                                result_l[0] = 0;};   break;
+                                                result_l = 0;};   break;
         default : ; // TODO
-    }
-
-    if (getUseMultiChannel()) {
-        channelsCount_l    = getChannelsCount();
-        selectedChannel_l  = getSelectedChannel();
-        size_l             = size_l / channelsCount_l;
-        for (int i = 0; i < channelsCount_l; i++) {
-            result_l.push_back(result_l[0]);
-        }
-
     }
 
     // iterate through all data
     for( int i = 0; i < size_l; i++ ) {
-        for (int channelIndex = 0; channelIndex < channelsCount_l; channelIndex++) {
-            int index = i*channelsCount_l + channelIndex;
-            switch (analyzationType_) {
-                case AnalyzationType::MINIMUM       : if ( (*this)[ index ] < result_l[channelIndex] ) {
-                                                        result_l[channelIndex] = (*this)[ index ];
-                                                      }; break;
-                case AnalyzationType::MAXIMUM       : if ( (*this)[ index ] > result_l[channelIndex] ) {
-                                                        result_l[channelIndex] = (*this)[ index ];
-                                                      }; break;
-                case AnalyzationType::AVERAGE       : result_l[channelIndex] += (*this)[ index ]; break;
-                case AnalyzationType::STD_DEVIATION : result_l[channelIndex] += pow((double((*this)[ index ]) - double(average_l[channelIndex])),2); break;
-                default : ; // TODO
-            }
-        }
-
-
-    }
-
-
-
-    for (int channelIndex = 0; channelIndex < channelsCount_l; channelIndex++) {
         switch (analyzationType_) {
-            case AnalyzationType::AVERAGE       : result_l[channelIndex] /= size_l; break;
-            case AnalyzationType::STD_DEVIATION : sqrt(result_l[channelIndex] / size_l); break;
+            case AnalyzationType::MINIMUM       : if ( (*this)[ i ] < result_l ) {
+                                                    result_l = (*this)[ i ];
+                                                  }; break;
+            case AnalyzationType::MAXIMUM       : if ( (*this)[ i ] > result_l ) {
+                                                    result_l = (*this)[ i ];
+                                                  }; break;
+            case AnalyzationType::AVERAGE       : result_l += (*this)[ i ]; break;
+            case AnalyzationType::STD_DEVIATION : result_l += pow((double((*this)[ i ]) - double(average_l)),2); break;
             default : ; // TODO
         }
     }
 
+
+    switch (analyzationType_) {
+        case AnalyzationType::AVERAGE       : result_l /= size_l; break;
+        case AnalyzationType::STD_DEVIATION : result_l = sqrt(double(result_l) / double(size_l)); break;
+        default : ; // TODO
+    }
 
 
     return result_l;
@@ -281,9 +247,6 @@ SignalProcessor& SignalProcessor::operator=( const SignalProcessor& other_) {
 
     // copy attributes
     resize(other_.getSize());
-    setChannelsCount    ( other_.getChannelsCount()                 );
-    setUseMultiChannel  ( other_.getUseMultiChannel()               );
-    setSelectedChannel  ( other_.getSelectedChannel()               );
     setUseCutOffToRange ( other_.getUseCutOffToRange()              );
     setMinMaxValue      ( other_.getMinValue(),other_.getMaxValue() );
 
@@ -307,9 +270,6 @@ SignalProcessor& SignalProcessor::operator=( const SignalProcessor& other_) {
 bool SignalProcessor::operator==( const SignalProcessor& other_) const {
     // check if attributes are identical
     bool isIdentical = ( getSize             () == other_.getSize             () &&
-                         getUseMultiChannel  () == other_.getUseMultiChannel  () &&
-                         getChannelsCount    () == other_.getChannelsCount    () &&
-                         getSelectedChannel  () == other_.getSelectedChannel  () &&
                          getUseCutOffToRange () == other_.getUseCutOffToRange () &&
                          getMinValue         () == other_.getMinValue         () &&
                          getMaxValue         () == other_.getMaxValue         () );
@@ -416,7 +376,8 @@ SignalProcessor SignalProcessor::operator/( int val_) const {
 SignalProcessor SignalProcessor::operator+( const SignalProcessor& val_) const {
     // copy SignalProcessor because operator is const
     SignalProcessor resultSignalProcessor(*this,true);
-    return resultSignalProcessor.modifySignalProcessor(ModificationType::ADD_SIGNALPROCESSOR,val_);
+    vector<int> temp = {val_};
+    return resultSignalProcessor.modifySignalProcessor(ModificationType::ADD_SIGNALPROCESSOR,temp);
 }
 
 /**
@@ -432,7 +393,8 @@ SignalProcessor SignalProcessor::operator+( const SignalProcessor& val_) const {
 SignalProcessor SignalProcessor::operator-( const SignalProcessor& val_) const {
     // copy SignalProcessor because operator is const
     SignalProcessor resultSignalProcessor(*this,true);
-    return resultSignalProcessor.modifySignalProcessor(ModificationType::SUBTRACT_SIGNALPROCESSOR,val_);
+    vector<int> temp = {val_};
+    return resultSignalProcessor.modifySignalProcessor(ModificationType::SUBTRACT_SIGNALPROCESSOR,temp);
 }
 
 /**
@@ -448,7 +410,8 @@ SignalProcessor SignalProcessor::operator-( const SignalProcessor& val_) const {
 SignalProcessor SignalProcessor::operator*( const SignalProcessor& val_) const {
     // copy SignalProcessor because operator is const
     SignalProcessor resultSignalProcessor(*this,true);
-    return resultSignalProcessor.modifySignalProcessor(ModificationType::MULTIPLY_SIGNALPROCESSOR,val_);
+    vector<int> temp = {val_};
+    return resultSignalProcessor.modifySignalProcessor(ModificationType::MULTIPLY_SIGNALPROCESSOR,temp);
 }
 
 /**
@@ -478,37 +441,14 @@ SignalProcessor SignalProcessor::operator/( const SignalProcessor& val_) const {
  * [1,2,4,5,100]
  */
 ostream& operator<<(ostream& ostream_, const SignalProcessor signalProcessor_) {
-    /*int channelsCount = 1;
-    int selectedChannel = 0;
-    int size = signalProcessor_.getSize();
-    if (signalProcessor_.getUseMultiChannel()) {
-        channelsCount   = signalProcessor_.getChannelsCount();
-        selectedChannel = signalProcessor_.getSelectedChannel();
-        size = signalProcessor_.getSize() / channelsCount;
-    }
+    int size_l = signalProcessor_.getSize();
 
     ostream_ << "[";
-    for (int i = 0; i < size -1; i++) {
-        ostream_ << signalProcessor_.getValueAt( i * channelsCount + selectedChannel) << ",";
-
-    }
-    ostream_ << signalProcessor_.getValueAt((size-1) * channelsCount + selectedChannel) << "]" << endl;
-    return ostream_;*/
-    int channelsCount = 1;
-    int selectedChannel = 0;
-    int size = signalProcessor_.getSize();
-    if (signalProcessor_.getUseMultiChannel()) {
-        channelsCount   = signalProcessor_.getChannelsCount();
-        selectedChannel = signalProcessor_.getSelectedChannel();
-        size = signalProcessor_.getSize() / channelsCount;
-    }
-
-    ostream_ << "[";
-    for (int i = 0; i < size -1; i++) {
+    for (int i = 0; i < size_l -1; i++) {
         ostream_ << signalProcessor_.getValueAt( i ) << ",";
 
     }
-    ostream_ << signalProcessor_.getValueAt((size-1)) << "]" << endl;
+    ostream_ << signalProcessor_.getValueAt((size_l-1)) << "]" << endl;
     return ostream_;
 }
 

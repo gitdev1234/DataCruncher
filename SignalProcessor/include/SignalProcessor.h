@@ -24,7 +24,7 @@ using namespace std;
  */
 enum ModificationType {ADD, SUBTRACT, MULTIPLY, DIVIDE, ADD_SIGNALPROCESSOR,
                        SUBTRACT_SIGNALPROCESSOR, MULTIPLY_SIGNALPROCESSOR,
-                       DIVIDE_SIGNALPROCESSOR, MOVING_AVERAGE};
+                       DIVIDE_SIGNALPROCESSOR};
 
 /**
  * @brief The AnalyzationType enum
@@ -77,10 +77,8 @@ class SignalProcessor : public vector<int>{
         /* --- constructors / destructors --- */
 
         // standard - constructor
-        SignalProcessor(int  size_             =       0,   bool useMultiChannel_  =   false,
-		        int  channelsCount_    =       1,   int  selectedChannel_  =       0,
-		        bool useCutOffToRange_ =   false,   int  minValue_         = INT_MIN,
-		        int  maxValue_         = INT_MAX                                   );
+        SignalProcessor(int  size_             =       0, bool useCutOffToRange_ =   false,
+                        int  minValue_         = INT_MIN,  int  maxValue_        = INT_MAX);
 
         // copy - constructor
         SignalProcessor(const SignalProcessor& other_, bool copyVectorData_ = true); // copy-constructor
@@ -89,26 +87,14 @@ class SignalProcessor : public vector<int>{
         int getSize   ()           const;
         int getValueAt(int index_) const;
 
-        template  <typename type>
-        SignalProcessor modifySignalProcessor(ModificationType modificationType_, vector<type> val_ ) ;
-        template  <typename type>
-        type cutOffToRange(type val_);
-        int movingAverage(int indexWithMultiChannel_, int neighbourhoodCount, int channelsCount_, int selectedChannel_);
-
-        vector<double> analyzeSignalProcessor(AnalyzationType analyzationType_) ;
-
-
+        double analyzeSignalProcessor(AnalyzationType analyzationType_) ;
+        SignalProcessor modifySignalProcessor(ModificationType modificationType_, vector<int> val_ );
+        int cutOffToRange(int val_);
 
         /* --- getter / setter --- */
-        bool getUseMultiChannel  () const    { return useMultiChannel; };
-        int  getChannelsCount    () const    { return channelsCount;   };
-        int  getSelectedChannel  () const    { return selectedChannel; };
         bool getUseCutOffToRange () const    { return useCutOffToRange;};
         int  getMinValue         () const    { return minValue;        };
         int  getMaxValue         () const    { return maxValue;        };
-        bool setSelectedChannel  (int  val_) ;
-        bool setUseMultiChannel  (bool val_) ;
-        bool setChannelsCount    (int  val_) ;
         void setUseCutOffToRange (bool val_) ;
         bool setMinMaxValue      (int  min_, int max_);
 
@@ -127,9 +113,6 @@ class SignalProcessor : public vector<int>{
         friend ostream& operator<<(ostream& ostream_, const SignalProcessor signalProcessor_);
         friend ostream& operator<<(ostream& ostream_, vector<double> val_);
     private:
-        bool useMultiChannel  = false;
-        int  channelsCount    = 1;
-        int  selectedChannel  = 0;
         bool useCutOffToRange = false;
         int  minValue         = INT_MIN;
         int  maxValue         = INT_MAX;
