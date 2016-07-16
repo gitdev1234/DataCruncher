@@ -24,7 +24,8 @@ using namespace std;
  */
 enum ModificationType {ADD, SUBTRACT, MULTIPLY, DIVIDE, ADD_SIGNALPROCESSOR,
                        SUBTRACT_SIGNALPROCESSOR, MULTIPLY_SIGNALPROCESSOR,
-                       DIVIDE_SIGNALPROCESSOR};
+                       DIVIDE_SIGNALPROCESSOR, THRESHOLD, BINARY_THRESHOLD,
+                       MOVING_AVERAGE};
 
 /**
  * @brief The AnalyzationType enum

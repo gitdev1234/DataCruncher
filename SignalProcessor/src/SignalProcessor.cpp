@@ -139,6 +139,10 @@ SignalProcessor SignalProcessor::modifySignalProcessor(ModificationType modifica
         }
     }
 
+    SignalProcessor copyBeforeModification;
+    if (modificationType_ == ModificationType::MOVING_AVERAGE) {
+        copyBeforeModification = (*this);
+    }
 
     int  size_l             = size();
     bool useCutOffToRange_l = getUseCutOffToRange();
@@ -148,22 +152,48 @@ SignalProcessor SignalProcessor::modifySignalProcessor(ModificationType modifica
         // modify
 
         switch (modificationType_) {
-            case ModificationType::ADD             : (*this)[ i ] = (*this)[ i ] + val_[0]; break;
-            case ModificationType::SUBTRACT        : (*this)[ i ] = (*this)[ i ] - val_[0]; break;
-            case ModificationType::MULTIPLY        : (*this)[ i ] = (*this)[ i ] * val_[0]; break;
-            case ModificationType::DIVIDE          : if (val_[0] == 0) {
-                                                        (*this)[ i ] = 0;
-                                                     } else {
-                                                        (*this)[ i ] = (*this)[ i ] / val_[0]; break;
-                                                     }; break;
-            case ModificationType::ADD_SIGNALPROCESSOR      : (*this)[ i ] = (*this)[ i ] + val_[i]; break;
-            case ModificationType::SUBTRACT_SIGNALPROCESSOR : (*this)[ i ] = (*this)[ i ] - val_[i]; break;
-            case ModificationType::MULTIPLY_SIGNALPROCESSOR : (*this)[ i ] = (*this)[ i ] * val_[i]; break;
-            case ModificationType::DIVIDE_SIGNALPROCESSOR   :  if (val_[i] == 0) {
-                                                                  (*this)[ i ] = 0;
-                                                               } else {
-                                                                  (*this)[ i ] = (*this)[ i ] / val_[i]; break;
-                                                               }; break;
+            case ModificationType::ADD             :
+                (*this)[ i ] = (*this)[ i ] + val_[0]; break;
+            case ModificationType::SUBTRACT        :
+                (*this)[ i ] = (*this)[ i ] - val_[0]; break;
+            case ModificationType::MULTIPLY        :
+                (*this)[ i ] = (*this)[ i ] * val_[0]; break;
+            case ModificationType::DIVIDE          :
+                if (val_[0] == 0) {
+                   (*this)[ i ] = 0;
+                } else {
+                   (*this)[ i ] = (*this)[ i ] / val_[0]; break;
+                }; break;
+            case ModificationType::ADD_SIGNALPROCESSOR      :
+                (*this)[ i ] = (*this)[ i ] + val_[i]; break;
+            case ModificationType::SUBTRACT_SIGNALPROCESSOR :
+                (*this)[ i ] = (*this)[ i ] - val_[i]; break;
+            case ModificationType::MULTIPLY_SIGNALPROCESSOR :
+                (*this)[ i ] = (*this)[ i ] * val_[i]; break;
+            case ModificationType::DIVIDE_SIGNALPROCESSOR   :
+                if (val_[i] == 0) {
+                   (*this)[ i ] = 0;
+                } else {
+                   (*this)[ i ] = (*this)[ i ] / val_[i]; break;
+                }; break;
+            case ModificationType::THRESHOLD :
+                if ((*this)[ i ] < val_[0]) {
+                   (*this)[ i ] = 0 ;
+                } break;
+            case ModificationType::BINARY_THRESHOLD :
+                if ((*this)[ i ] < val_[0]) {
+                   (*this)[ i ] = 0;
+                } else {
+                   (*this)[ i ] = 1 ;
+                }break;
+            case ModificationType::MOVING_AVERAGE : {
+                    int sum = 0;
+                    for( int j = 0; j < val_[0]; j++ ) {
+                        sum += copyBeforeModification.getValueAt( i+j-val_[0]/2 );
+                    }
+
+                    (*this)[i] = round(double(sum) / double( val_[0] ) );
+                } break;
 
             default : (*this)[i] = 0;
         }
@@ -219,7 +249,7 @@ double SignalProcessor::analyzeSignalProcessor(AnalyzationType analyzationType_)
 
 
     switch (analyzationType_) {
-        case AnalyzationType::AVERAGE       : result_l /= size_l; break;
+        case AnalyzationType::AVERAGE       : result_l = double(result_l) / double(size_l); break;
         case AnalyzationType::STD_DEVIATION : result_l = sqrt(double(result_l) / double(size_l)); break;
         default : ; // TODO
     }

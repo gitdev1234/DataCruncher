@@ -145,18 +145,28 @@ TEST_CASE( "outputting, analyzing and modifying a signalprocessor", "[signalproc
                 sstr2 << s;
                 REQUIRE( sstr2.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
             }
-            /*
+            SECTION ("threshold works" ) {
+                s = s.modifySignalProcessor(ModificationType::THRESHOLD,temp);
+                sstr << s;
+                REQUIRE( sstr.str() == "[0,0,0,0,0,5,6,7,8,9]\n");
+            }
+            SECTION ("binary threshold works" ) {
+                s = s.modifySignalProcessor(ModificationType::BINARY_THRESHOLD,temp);
+                sstr << s;
+                REQUIRE( sstr.str() == "[0,0,0,0,0,1,1,1,1,1]\n");
+            }
+
             SECTION ("MOVING_AVERAGE works") {
                 temp[0] = 3; // neighbourhoodCount
                 s = s.modifySignalProcessor(ModificationType::MOVING_AVERAGE,temp);
                 sstr << s;
                 REQUIRE( sstr.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
-                s[5] = 15;
+                s[6] = 15;
                 s = s.modifySignalProcessor(ModificationType::MOVING_AVERAGE,temp);
                 sstr2 << s;
-                REQUIRE( sstr2.str() == "[0,1,2,7,8,9,6,7,8,9]\n");
+                REQUIRE( sstr2.str() == "[0,1,2,3,4,8,9,10,8,9]\n");
             }
-            */
+
 
         }
 
@@ -244,7 +254,7 @@ TEST_CASE( "outputting, analyzing and modifying a signalprocessor", "[signalproc
                 REQUIRE(tempResult == Approx(2.8722813233));
                 s[6] = 15;
                 tempResult = s.analyzeSignalProcessor(AnalyzationType::STD_DEVIATION);
-                REQUIRE(tempResult == Approx(4.2720018727));
+                REQUIRE(tempResult == Approx(4.2708313008));
 
             }
 
