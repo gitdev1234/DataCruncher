@@ -22,5 +22,4 @@ SOURCES += main.cpp \
 HEADERS += \
     catch.hpp \
     include/signal_template.h \
-    include/SignalProcessor.h \
-    include/SignalProcessor_template.h
+    include/SignalProcessor.h
