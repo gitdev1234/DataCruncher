@@ -359,7 +359,7 @@ TEST_CASE( "outputting, analyzing, histogram and modifying a signalprocessor", "
                 SECTION ("text-file") {
                     s[6] = INT_MAX;
                     s[7] = INT_MIN;
-                    tempHistogram = s.calcHistogram("temp.csv");
+                    tempHistogram = s.calcHistogram("temp.csv",",");
 
                     REQUIRE(tempHistogram[0] == 1);
                     REQUIRE(tempHistogram[1] == 1);

@@ -263,7 +263,7 @@ double SignalProcessor::analyzeSignalProcessor(AnalyzationType analyzationType_)
     return result_l;
 }
 
-map<int, int> SignalProcessor::calcHistogram(string path_) {
+map<int, int> SignalProcessor::calcHistogram(const string &path_, const string &delimiter_) {
     int size_l = getSize();
     map<int, int> res;
     for( int i = 0; i < size_l; i++ ) {
@@ -280,7 +280,7 @@ map<int, int> SignalProcessor::calcHistogram(string path_) {
         typedef map<int, int>::iterator it_type;
         for(it_type iterator = res.begin(); iterator != res.end(); iterator++) {
             file << iterator->first;
-            file << ",";
+            file << delimiter_;
             file << iterator->second << endl;
         }
         file.close();
