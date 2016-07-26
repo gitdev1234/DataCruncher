@@ -1,11 +1,11 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 
 #include <iostream>
+#include <climits>
 //---
 #include "catch.hpp"
 //---
 #include "include/SignalProcessor.h"
-#include "include/SignalProcessor_template.h"
 
 
 // !!!! TEST_CASE IN COMBINITION WITH REQUIRE IS LIKE A LOOP STRUCTURE !!!!
@@ -91,7 +91,7 @@ TEST_CASE("checking equality of two signalProcessors") {
     }
 }
 
-TEST_CASE( "outputting, analyzing and modifying a signalprocessor", "[signalprocessor]" ) {
+TEST_CASE( "outputting, analyzing, histogram and modifying a signalprocessor", "[signalprocessor]" ) {
 
     SignalProcessor s, s2;
     for (int i = 0; i< 10; i++) {
@@ -266,10 +266,138 @@ TEST_CASE( "outputting, analyzing and modifying a signalprocessor", "[signalproc
                 s[6] = 15;
                 tempResult = s.analyzeSignalProcessor(AnalyzationType::STD_DEVIATION);
                 REQUIRE(tempResult == Approx(4.2708313008));
-
             }
 
 
+        }
+        SECTION ("histogram") {
+            map<int, int> tempHistogram = s.calcHistogram();
+            REQUIRE(tempHistogram[0] == 1);
+            REQUIRE(tempHistogram[1] == 1);
+            REQUIRE(tempHistogram[2] == 1);
+            REQUIRE(tempHistogram[3] == 1);
+            REQUIRE(tempHistogram[4] == 1);
+            REQUIRE(tempHistogram[5] == 1);
+            REQUIRE(tempHistogram[6] == 1);
+            REQUIRE(tempHistogram[7] == 1);
+            REQUIRE(tempHistogram[8] == 1);
+            REQUIRE(tempHistogram[9] == 1);
+            SECTION ("add one of the excisting values") {
+                s[2] = 5;
+                tempHistogram = s.calcHistogram();
+                REQUIRE(tempHistogram[0] == 1);
+                REQUIRE(tempHistogram[1] == 1);
+                REQUIRE((tempHistogram.find(2) == tempHistogram.end()) == true);
+                REQUIRE(tempHistogram[3] == 1);
+                REQUIRE(tempHistogram[4] == 1);
+                REQUIRE(tempHistogram[5] == 2);
+                REQUIRE(tempHistogram[6] == 1);
+                REQUIRE(tempHistogram[7] == 1);
+                REQUIRE(tempHistogram[8] == 1);
+                REQUIRE(tempHistogram[9] == 1);
+                SECTION ("add another of the excisting values") {
+                    s[5] = 4;
+                    tempHistogram = s.calcHistogram();
+                    REQUIRE(tempHistogram[0] == 1);
+                    REQUIRE(tempHistogram[1] == 1);
+                    REQUIRE((tempHistogram.find(2) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[3] == 1);
+                    REQUIRE(tempHistogram[4] == 2);
+                    REQUIRE(tempHistogram[5] == 1);
+                    REQUIRE(tempHistogram[6] == 1);
+                    REQUIRE(tempHistogram[7] == 1);
+                    REQUIRE(tempHistogram[8] == 1);
+                    REQUIRE(tempHistogram[9] == 1);
+                }
+                SECTION ("add another value") {
+                    s[6] = 200;
+                    tempHistogram = s.calcHistogram();
+                    REQUIRE(tempHistogram[0] == 1);
+                    REQUIRE(tempHistogram[1] == 1);
+                    REQUIRE((tempHistogram.find(2) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[3] == 1);
+                    REQUIRE(tempHistogram[4] == 1);
+                    REQUIRE(tempHistogram[5] == 2);
+                    REQUIRE((tempHistogram.find(6) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[7] == 1);
+                    REQUIRE(tempHistogram[8] == 1);
+                    REQUIRE(tempHistogram[9] == 1);
+                    REQUIRE(tempHistogram[200] == 1);
+                }
+                SECTION ("a negative value") {
+                    s[6] = -400;
+                    tempHistogram = s.calcHistogram();
+                    REQUIRE(tempHistogram[0] == 1);
+                    REQUIRE(tempHistogram[1] == 1);
+                    REQUIRE((tempHistogram.find(2) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[3] == 1);
+                    REQUIRE(tempHistogram[4] == 1);
+                    REQUIRE(tempHistogram[5] == 2);
+                    REQUIRE((tempHistogram.find(6) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[7] == 1);
+                    REQUIRE(tempHistogram[8] == 1);
+                    REQUIRE(tempHistogram[9] == 1);
+                    REQUIRE(tempHistogram[-400] == 1);
+                }
+                SECTION ("min and max values") {
+                    s[6] = INT_MAX;
+                    s[7] = INT_MIN;
+                    tempHistogram = s.calcHistogram();
+                    REQUIRE(tempHistogram[0] == 1);
+                    REQUIRE(tempHistogram[1] == 1);
+                    REQUIRE((tempHistogram.find(2) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[3] == 1);
+                    REQUIRE(tempHistogram[4] == 1);
+                    REQUIRE(tempHistogram[5] == 2);
+                    REQUIRE((tempHistogram.find(6) == tempHistogram.end()) == true);
+                    REQUIRE((tempHistogram.find(7) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[8] == 1);
+                    REQUIRE(tempHistogram[9] == 1);
+                    REQUIRE(tempHistogram[INT_MIN] == 1);
+                    REQUIRE(tempHistogram[INT_MAX] == 1);
+                }
+                SECTION ("text-file") {
+                    s[6] = INT_MAX;
+                    s[7] = INT_MIN;
+                    tempHistogram = s.calcHistogram("temp.csv");
+
+                    REQUIRE(tempHistogram[0] == 1);
+                    REQUIRE(tempHistogram[1] == 1);
+                    REQUIRE((tempHistogram.find(2) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[3] == 1);
+                    REQUIRE(tempHistogram[4] == 1);
+                    REQUIRE(tempHistogram[5] == 2);
+                    REQUIRE((tempHistogram.find(6) == tempHistogram.end()) == true);
+                    REQUIRE((tempHistogram.find(7) == tempHistogram.end()) == true);
+                    REQUIRE(tempHistogram[8] == 1);
+                    REQUIRE(tempHistogram[9] == 1);
+                    REQUIRE(tempHistogram[INT_MIN] == 1);
+                    REQUIRE(tempHistogram[INT_MAX] == 1);
+
+                    ifstream ifs("temp.csv");
+                    string line;
+                    getline(ifs, line);
+                    REQUIRE(line=="-2147483648,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="0,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="1,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="3,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="4,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="5,2");
+                    getline(ifs, line);
+                    REQUIRE(line=="8,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="9,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="2147483647,1");
+                    getline(ifs, line);
+                    REQUIRE(line=="");
+                }
+            }
         }
     }
 

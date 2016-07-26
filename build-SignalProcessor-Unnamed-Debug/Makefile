@@ -266,7 +266,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/SignalProcessor1.0.0 || mkdir -p .tmp/SignalProcessor1.0.0
-	$(COPY_FILE) --parents $(DIST) .tmp/SignalProcessor1.0.0/ && $(COPY_FILE) --parents ../SignalProcessor/catch.hpp include/signal_template.h ../SignalProcessor/include/SignalProcessor.h ../SignalProcessor/include/SignalProcessor_template.h .tmp/SignalProcessor1.0.0/ && $(COPY_FILE) --parents ../SignalProcessor/main.cpp ../SignalProcessor/src/SignalProcessor.cpp .tmp/SignalProcessor1.0.0/ && (cd `dirname .tmp/SignalProcessor1.0.0` && $(TAR) SignalProcessor1.0.0.tar SignalProcessor1.0.0 && $(COMPRESS) SignalProcessor1.0.0.tar) && $(MOVE) `dirname .tmp/SignalProcessor1.0.0`/SignalProcessor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/SignalProcessor1.0.0
+	$(COPY_FILE) --parents $(DIST) .tmp/SignalProcessor1.0.0/ && $(COPY_FILE) --parents ../SignalProcessor/catch.hpp include/signal_template.h ../SignalProcessor/include/SignalProcessor.h .tmp/SignalProcessor1.0.0/ && $(COPY_FILE) --parents ../SignalProcessor/main.cpp ../SignalProcessor/src/SignalProcessor.cpp .tmp/SignalProcessor1.0.0/ && (cd `dirname .tmp/SignalProcessor1.0.0` && $(TAR) SignalProcessor1.0.0.tar SignalProcessor1.0.0 && $(COMPRESS) SignalProcessor1.0.0.tar) && $(MOVE) `dirname .tmp/SignalProcessor1.0.0`/SignalProcessor1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/SignalProcessor1.0.0
 
 
 clean:compiler_clean 
@@ -303,11 +303,11 @@ compiler_clean:
 
 ####### Compile
 
-main.o: ../SignalProcessor/main.cpp ../SignalProcessor/catch.hpp
+main.o: ../SignalProcessor/main.cpp ../SignalProcessor/catch.hpp \
+		../SignalProcessor/include/SignalProcessor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SignalProcessor/main.cpp
 
-SignalProcessor.o: ../SignalProcessor/src/SignalProcessor.cpp ../SignalProcessor/include/SignalProcessor.h \
-		../SignalProcessor/include/SignalProcessor_template.h
+SignalProcessor.o: ../SignalProcessor/src/SignalProcessor.cpp ../SignalProcessor/include/SignalProcessor.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o SignalProcessor.o ../SignalProcessor/src/SignalProcessor.cpp
 
 ####### Install
