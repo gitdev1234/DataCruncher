@@ -167,16 +167,41 @@ TEST_CASE( "outputting, analyzing, histogram and modifying a signalprocessor", "
                 REQUIRE( sstr2.str() == "[0,1,2,3,4,8,9,10,8,9]\n");
             }
             SECTION ("GRADIENT works") {
-                s = s.modifySignalProcessor(ModificationType::GRADIENT);
-                sstr << s;
-                REQUIRE( sstr.str() == "[1,1,1,1,1,1,1,1,1,1]\n");
+                SECTION ("GRADIENT works with positiv slopes") {
+                    s = s.modifySignalProcessor(ModificationType::GRADIENT_NORMAL);
+                    sstr << s;
+                    REQUIRE( sstr.str() == "[1,1,1,1,1,1,1,1,1,1]\n");
+                }
+                SECTION ("GRADIENT works negativ slopes") {
+                    s[6] = 15;
+                    SECTION("GRADIENT_NORMAL works with negativ slopes and without cutoff") {
+                        s = s.modifySignalProcessor(ModificationType::GRADIENT_NORMAL);
+                        sstr << s;
+                        REQUIRE( sstr.str() == "[1,1,1,1,1,6,1,-4,1,1]\n");
+                    }
+                    SECTION("GRADIENT_NORMAL works with negativ slopes and with cutoff") {
+                        s.setMinMaxValue(0,5);
+                        s.setUseCutOffToRange(true);
+                        s = s.modifySignalProcessor(ModificationType::GRADIENT_NORMAL);
+                        sstr << s;
+                        REQUIRE( sstr.str() == "[1,1,1,1,1,5,1,0,1,1]\n");
+                    }
+                    SECTION("GRADIENT_ABS works with negativ slopes and without cutoff") {
+                        s = s.modifySignalProcessor(ModificationType::GRADIENT_ABS);
+                        sstr << s;
+                        REQUIRE( sstr.str() == "[1,1,1,1,1,6,1,4,1,1]\n");
+                    }
+                    SECTION("GRADIENT_ABS works with negativ slopes and with cutoff") {
+                        s.setMinMaxValue(0,5);
+                        s.setUseCutOffToRange(true);
+                        s = s.modifySignalProcessor(ModificationType::GRADIENT_ABS);
+                        sstr << s;
+                        REQUIRE( sstr.str() == "[1,1,1,1,1,5,1,4,1,1]\n");
+                    }
+                }
             }
-            SECTION ("GRADIENT works") {
-                s[6] = 15;
-                s = s.modifySignalProcessor(ModificationType::GRADIENT);
-                sstr << s;
-                REQUIRE( sstr.str() == "[1,1,1,1,1,6,1,-4,1,1]\n");
-            }
+
+
 
 
         }
