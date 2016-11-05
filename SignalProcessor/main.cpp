@@ -200,7 +200,16 @@ TEST_CASE( "outputting, analyzing, histogram and modifying a signalprocessor", "
                     }
                 }
             }
+            SECTION ("INVERT works") {
+                s.setMinMaxValue(0,255);
+                s.setUseCutOffToRange(true);
+                SECTION ("INVERT works for positive values") {
+                    s = s.modifySignalProcessor(ModificationType::INVERT,temp);
+                    sstr << s;
+                    REQUIRE( sstr.str() == "[255,254,253,252,251,250,249,248,247,246]\n");
+                }
 
+            }
 
 
 
