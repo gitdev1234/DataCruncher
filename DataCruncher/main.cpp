@@ -76,3 +76,21 @@ TEST_CASE("constructors, getters, setters") {
             }
     }
 }
+
+TEST_CASE("min max cut-off") {
+    SECTION("cut-off by direct call") {
+        DataCruncher dataC(10,true,-25.2,232323.2323);
+
+        REQUIRE(dataC.cutOffToRange(-25.1)==-25.1);
+        REQUIRE(dataC.cutOffToRange(-25.2)==-25.2);
+        REQUIRE(dataC.cutOffToRange(-25.3)==-25.2);
+        REQUIRE(dataC.cutOffToRange(-10000000)==-25.2);
+        REQUIRE(dataC.cutOffToRange(0)==0);
+        REQUIRE(dataC.cutOffToRange(10)==10);
+        REQUIRE(dataC.cutOffToRange(28.234234234)==28.234234234);
+        REQUIRE(dataC.cutOffToRange(232323.2322)==232323.2322);
+        REQUIRE(dataC.cutOffToRange(232323.2323)==232323.2323);
+        REQUIRE(dataC.cutOffToRange(232323.2324)==232323.2323);
+        REQUIRE(dataC.cutOffToRange(10000000)==232323.2323);
+    }
+}
