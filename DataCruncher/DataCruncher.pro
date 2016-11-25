@@ -20,8 +20,8 @@ TEMPLATE = app
 INCLUDEPATH += include/
 
 SOURCES += main.cpp \
-    src/DataCruncher.cpp
+    src/VectorData.cpp
 
 HEADERS += \
     catch.hpp \
-    include/DataCruncher.h
+    include/VectorData.h
