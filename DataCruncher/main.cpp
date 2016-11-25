@@ -5,7 +5,7 @@
 //---
 #include "catch.hpp"
 //---
-#include "include/SignalProcessor.h"
+#include "include/DataCruncher.h"
 
 
 // !!!! TEST_CASE IN COMBINITION WITH REQUIRE IS LIKE A LOOP STRUCTURE !!!!

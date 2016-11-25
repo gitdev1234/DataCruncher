@@ -6,7 +6,7 @@
  * @version 1.0 20160713
  */
 
-#include "../include/SignalProcessor.h"
+#include "../include/DataCruncher.h"
 
 /* --- constructors / destructors --- */
 

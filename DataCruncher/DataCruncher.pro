@@ -8,18 +8,18 @@ QT       += core
 
 QT       -= gui
 
-TARGET = SignalProcessor
+TARGET = DataCruncher
 CONFIG   += console
 CONFIG   -= app_bundle
-CONFIG   += c++11
+#CONFIG   += c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    src/SignalProcessor.cpp
+    src/DataCruncher.cpp
 
 HEADERS += \
     catch.hpp \
-    include/signal_template.h \
-    include/SignalProcessor.h
+    include/DataCruncher.h

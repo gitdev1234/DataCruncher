@@ -1,0 +1,62 @@
+/**
+ * SignalProcessor.h
+ * Purpose: defines class SignalProcessor and enum ModificationType
+ *
+ * @author Wall.Of.Death
+ * @version 1.0 20160713
+ */
+
+#ifndef SIGNALPROCESSOR_H
+#define SIGNALPROCESSOR_H
+
+#include <iostream>
+
+using namespace std;
+
+/**
+ * class 
+ */
+class SignalProcessor : public vector<double> {
+    public:
+        /* --- constructors / destructors --- */
+
+        // standard - constructor
+        SignalProcessor(int  size_             =       0, bool useCutOffToRange_ =   false,
+                        double  minValue_         = double_MIN,  double  maxValue_        = double_MAX);
+
+        // copy - constructor
+        SignalProcessor(const SignalProcessor& other_, bool copyVectorData_ = true); // copy-constructor
+
+        /* --- miscellaneous --- */
+        int getSize   ()           const;
+        double getValueAt(int index_) const;
+        double cutOffToRange(double val_);
+
+        /* --- getter / setter --- */
+        bool getUseCutOffToRange    () const    { return useCutOffToRange;};
+        double  getMinValue         () const    { return minValue;        };
+        double  getMaxValue         () const    { return maxValue;        };
+        void setUseCutOffToRange (bool val_) ;
+        bool setMinMaxValue      (double  min_, double max_);
+
+        /* --- operators --- */
+        SignalProcessor& operator=(const SignalProcessor& other_);
+        bool   operator==(const SignalProcessor& other_) const;
+        bool   operator!=(const SignalProcessor& other_) const;
+        SignalProcessor operator+(double val_) const;
+        SignalProcessor operator-(double val_) const;
+        SignalProcessor operator*(double val_) const;
+        SignalProcessor operator/(double val_) const;
+        SignalProcessor operator+(const SignalProcessor& val_) const;
+        SignalProcessor operator-(const SignalProcessor& val_) const;
+        SignalProcessor operator*(const SignalProcessor& val_) const;
+        SignalProcessor operator/(const SignalProcessor& val_) const;
+        friend ostream& operator<<(ostream& ostream_, const SignalProcessor signalProcessor_);
+        friend ostream& operator<<(ostream& ostream_, vector<double> val_);
+    private:
+        bool useCutOffToRange = false;
+        double  minValue         = double_MIN;
+        double  maxValue         = double_MAX;
+};
+
+#endif // SIGNALPROCESSOR_H
