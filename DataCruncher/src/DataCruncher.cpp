@@ -79,7 +79,6 @@ bool DataCruncher::setMinMaxValue(double min_, double max_) {
     }
 }
 
-/* --- miscellaneous --- */
 /**
  * DataCruncher::getSize
  * @brief returns the number of fields within the vector
@@ -115,6 +114,9 @@ double DataCruncher::getValueAt(int index_) const {
     return (*this)[ index_ ];
 
 }
+
+/* --- miscellaneous --- */
+
 
 /**
  * DataCruncher::cutOffToRange
