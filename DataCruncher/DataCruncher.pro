@@ -17,6 +17,8 @@ QMAKE_CXXFLAGS += -std=c++11
 TEMPLATE = app
 
 
+INCLUDEPATH += include/
+
 SOURCES += main.cpp \
     src/DataCruncher.cpp
 
