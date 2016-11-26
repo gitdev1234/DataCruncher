@@ -30,9 +30,9 @@ class VectorData : public vector<double> {
         VectorData(const VectorData& other_, bool copyVectorData_ = true);
 
         /* --- miscellaneous --- */
-        int    getSize       ()           const;
-        double getValueAt    (int index_) const;
-        double cutOffToRange (double val_);
+        int    getSize       ()            const;
+        double getValueAt    (int index_)  const;
+        double cutOffToRange (double val_) const;
 
         /* --- getter / setter --- */
         bool    getUseCutOffToRange () const    {return useCutOffToRange;};
@@ -43,8 +43,8 @@ class VectorData : public vector<double> {
 
         /* --- operators --- */
         VectorData& operator= (const VectorData& other_);
-        bool          operator==(const VectorData& other_) const;
-        bool          operator!=(const VectorData& other_) const;
+        bool        operator==(const VectorData& other_) const;
+        bool        operator!=(const VectorData& other_) const;
         VectorData  operator+ (double val_) const;
         VectorData  operator- (double val_) const;
         VectorData  operator* (double val_) const;

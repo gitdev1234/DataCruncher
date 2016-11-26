@@ -124,14 +124,272 @@ double VectorData::getValueAt(int index_) const {
  * @param val_ value which is to cut
  * @return returns value which is cut into the range of minValue and maxValue
  */
-double VectorData::cutOffToRange(double val_) {
-    double min = getMinValue();
-    double max = getMaxValue();
-    if (val_ < min) {
-        val_ = min;
-    } else if (val_ > max) {
-        val_ = max;
+double VectorData::cutOffToRange(double val_) const {
+    if (getUseCutOffToRange()) {
+        double min = getMinValue();
+        double max = getMaxValue();
+        if (val_ < min) {
+            val_ = min;
+        } else if (val_ > max) {
+            val_ = max;
+        }
     }
     return val_;
 }
 
+/* --- operators --- */
+
+/**
+ * VectorData::operator =
+ * @brief assignment-operator, copies all content of other_
+ * @param other_ VectorData object to copy from
+ * @return returns a new VectorData instance which is copied from other_
+ * creates a new instance of VectorData and copies the attributes
+ * and vector-data of other_ to it
+ */
+VectorData& VectorData::operator=( const VectorData& other_) {
+    // proof for identical address
+    if (this == &other_) {
+        return (*this);
+    }
+
+    // copy attributes
+    resize(other_.getSize());
+    setUseCutOffToRange ( other_.getUseCutOffToRange()              );
+    setMinMaxValue      ( other_.getMinValue(),other_.getMaxValue() );
+
+    // copy vector-data
+    int size_l = other_.getSize();
+    for (int i = 0; i < size_l; i++) {
+        (*this)[i] = other_[i];
+    }
+
+    return *this;
+
+}
+
+/**
+ * VectorData::operator ==
+ * @brief equality-operator, checks if all content is equal
+ * @param other_ VectorData-object to compare with
+ * @return returns true if all attributes and vector-data are equal, otherwise false
+ * checks if all attributes and vector-data of *this and other_ are equal
+ */
+bool VectorData::operator==( const VectorData& other_) const {
+    // check if attributes are identical
+    bool isIdentical = ( getSize             () == other_.getSize             () &&
+                         getUseCutOffToRange () == other_.getUseCutOffToRange () &&
+                         getMinValue         () == other_.getMinValue         () &&
+                         getMaxValue         () == other_.getMaxValue         () );
+
+    // check if vector-data is identical
+    if (isIdentical) {
+        int size_l = getSize();
+        for (int i = 0; i < size_l; i++) {
+            if ((*this)[i] != other_[i]) {
+                isIdentical = false;
+            }
+        }
+    }
+
+    return isIdentical;
+}
+
+/**
+ * VectorData::operator !=
+ * @brief inequality-operator, checks if anything is different
+ * @param other_ VectorData object to compare with
+ * @return returns true if any attribute or any content of the vector is different, otherwise false
+ * checks if any attribute or any vector-data of *this and other_ is not equal
+ */
+bool VectorData::operator!=( const VectorData& other_) const {
+    // check if identical and return the invers
+    return (!((*this == other_)));
+}
+
+/**
+ * operator <<
+ * @brief shift-out operator for print VectorData-objects to console
+ * @param ostream_ stream-object before printing VectorData-object to it
+ * @param VectorData_ VectorData object which shall be printed
+ * @return returns stream object after printing VectorData-object to it
+ * prints out vector-data of VectorData object to console
+ * printign a VectorData with the elements {1,2,4,5,100} looks like this:
+ * [1,2,4,5,100]
+ */
+ostream& operator<<(ostream& ostream_, const VectorData VectorData_) {
+    int size_l = VectorData_.getSize();
+
+    ostream_ << "[";
+    for (int i = 0; i < size_l -1; i++) {
+        ostream_ << VectorData_.getValueAt( i ) << ",";
+
+    }
+    ostream_ << VectorData_.getValueAt((size_l-1)) << "]" << endl;
+    return ostream_;
+}
+
+/**
+ * VectorData::operator +
+ * @brief addition-operator, adds a VectorData-object and an int value
+ * @param val_ value to add with
+ * @return returns a new VectorData-object
+ *
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator+(double val_ ) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    for (int i = 0; i < resultVectorData.getSize(); i++) {
+        resultVectorData[i] += val_;
+        resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+    }
+    return resultVectorData;
+}
+
+/**
+ * VectorData::operator -
+ * @brief substraction-operator, substracts an int value from a VectorData-object
+ * @param val_ value to subtract from VectorData object
+ * @return returns a new VectorData-object
+ *
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator-(double val_) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    for (int i = 0; i < resultVectorData.getSize(); i++) {
+        resultVectorData[i] -= val_;
+        resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+    }
+    return resultVectorData;
+}
+
+/**
+ * VectorData::operator *
+ * @brief multiplication-operator, multiplies a VectorData-object and an int value
+ * @param val_ value to multiply with
+ * @return returns a new VectorData-object
+ *
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator*(double val_) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    for (int i = 0; i < resultVectorData.getSize(); i++) {
+        resultVectorData[i] *= val_;
+        resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+    }
+    return resultVectorData;
+}
+
+/**
+ * VectorData::operator /
+ * @brief division-operator, divides a VectorData-object by an int value
+ * @param val_ value to divide by
+ * @return returns a new VectorData-object
+ *
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator/(double val_) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    for (int i = 0; i < resultVectorData.getSize(); i++) {
+        if (val_ != 0) {
+            resultVectorData[i] /= val_;
+        } else {
+            resultVectorData[i] = 0;
+        }
+
+        resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+    }
+    return resultVectorData;
+}
+
+/**
+ * VectorData::operator +
+ * @brief addition-operator, adds two VectorData-objects, element by element
+ * @param val_ VectorData-object to add with
+ * @return returns a new VectorData-object
+ *
+ * NOTE : can only get used for two VectorData-objects with same size
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator+( const VectorData& val_) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    if ((*this).getSize() == val_.getSize()) {
+        for (int i = 0; i < resultVectorData.getSize(); i++) {
+            resultVectorData[i] += val_[i];
+            resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+        }
+    }
+    return resultVectorData;
+}
+
+/**
+ * VectorData::operator -
+ * @brief substraction-operator, substracts two VectorData-objects, element by element
+ * @param val_ VectorData-object which is subtracted from *this
+ * @return returns a new VectorData-object
+ *
+ * NOTE : can only get used for two VectorData-objects with same size
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator-( const VectorData& val_) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    if ((*this).getSize() == val_.getSize()) {
+        for (int i = 0; i < resultVectorData.getSize(); i++) {
+            resultVectorData[i] -= val_[i];
+            resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+        }
+    }
+    return resultVectorData;
+}
+
+/**
+ * VectorData::operator *
+ * @brief multiplication-operator, multiplies two VectorData-objects, element by element
+ * @param val_ VectorData-object to multiply with
+ * @return returns a new VectorData-object
+ *
+ * NOTE : can only get used for two VectorData-objects with same size
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator*( const VectorData& val_) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    if ((*this).getSize() == val_.getSize()) {
+        for (int i = 0; i < resultVectorData.getSize(); i++) {
+            resultVectorData[i] *= val_[i];
+            resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+        }
+    }
+    return resultVectorData;
+}
+
+/**
+ * VectorData::operator /
+ * @brief division-operator, divides two VectorData-objects, element by element
+ * @param val_ VectorData-object by which *this is divided by
+ * @return returns a new VectorData-object
+ *
+ * NOTE : can only get used for two VectorData-objects with same size
+ * NOTE : uses VectorData::cutOffToRange if VectorData::useCutOffToRange == true
+ */
+VectorData VectorData::operator/( const VectorData& val_) const {
+    // copy VectorData because operator is const
+    VectorData resultVectorData(*this,true);
+    if ((*this).getSize() == val_.getSize()) {
+        for (int i = 0; i < resultVectorData.getSize(); i++) {
+            if (val_[i] != 0) {
+                resultVectorData[i] /= val_[i];
+            } else {
+                resultVectorData[i] = 0;
+            }
+            resultVectorData[i] = cutOffToRange(resultVectorData[i]);
+        }
+    }
+    return resultVectorData;
+}

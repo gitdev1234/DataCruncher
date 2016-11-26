@@ -1,7 +1,9 @@
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 
 #include <iostream>
+#include <sstream>
 #include <climits>
+
 //---
 #include "catch.hpp"
 //---
@@ -92,5 +94,185 @@ TEST_CASE("min max cut-off") {
         REQUIRE(vData.cutOffToRange(232323.2323)==232323.2323);
         REQUIRE(vData.cutOffToRange(232323.2324)==232323.2323);
         REQUIRE(vData.cutOffToRange(10000000)==232323.2323);
+    }
+}
+
+TEST_CASE("operators") {
+    VectorData vData, vData2;
+    for (int i = 0; i< 10; i++) {
+        vData.push_back(i);
+    }
+    vData.setMinMaxValue(2,7);
+    vData.setUseCutOffToRange(true);
+
+    SECTION("assignment copies all attributes and data") {
+        VectorData vData2 = vData;
+        REQUIRE(&vData2 != &vData);
+        REQUIRE(vData.getMaxValue() == vData2.getMaxValue());
+        REQUIRE(vData.getMinValue() == vData2.getMinValue());
+        REQUIRE(vData.getUseCutOffToRange() == vData2.getUseCutOffToRange());
+        REQUIRE(vData.getSize() == vData2.getSize());
+        for (int i = 0; i < vData.getSize(); i++) {
+            REQUIRE(vData[i] == vData2[i]);
+            REQUIRE(vData.getValueAt(i) == vData2.getValueAt(i));
+        }
+
+    }
+
+    SECTION("checking equality and inequality of two vectorData-objects") {
+
+        vData2 = vData;
+        REQUIRE(&vData != &vData2);
+        REQUIRE(vData.getMaxValue() == vData2.getMaxValue());
+        REQUIRE(vData.getMinValue() == vData2.getMinValue());
+        REQUIRE(vData.getUseCutOffToRange() == vData2.getUseCutOffToRange());
+        REQUIRE(vData.getSize() == vData2.getSize());
+        for (int i = 0; i < vData.getSize(); i++) {
+            REQUIRE(vData[i] == vData2[i]);
+            REQUIRE(vData.getValueAt(i) == vData2.getValueAt(i));
+        }
+
+        SECTION("identical") {
+            REQUIRE((vData == vData2));
+            REQUIRE_FALSE((vData != vData2));
+        }
+
+        SECTION("not identical because of attributes") {
+            vData.setMinMaxValue(40,900);
+            REQUIRE_FALSE((vData == vData2));
+            REQUIRE((vData != vData2));
+        }
+
+         SECTION("not identical because of data") {
+            vData[3] = 400;
+            REQUIRE_FALSE((vData == vData2));
+            REQUIRE((vData != vData2));
+        }
+    }
+
+    SECTION("shift out and arithmetic operators") {
+
+        stringstream sstr;
+
+        SECTION ("<< operator works") {
+            sstr << vData;
+            REQUIRE( sstr.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
+        }
+
+        SECTION ("+ and - works with scalar values") {
+            SECTION ("+  and - without cutOff") {
+                vData.setUseCutOffToRange(false);
+                vData = vData + 5;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[5,6,7,8,9,10,11,12,13,14]\n");
+                vData = vData - 5;
+                stringstream sstr2;
+                sstr2 << vData;
+                REQUIRE( sstr2.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
+            }
+
+            SECTION (" + with cutOff") {
+                vData.setUseCutOffToRange(true);
+                vData = vData + 5;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[5,6,7,7,7,7,7,7,7,7]\n");
+            }
+
+            SECTION (" - with cutOff") {
+                vData.setUseCutOffToRange(true);
+                vData = vData - 5;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[2,2,2,2,2,2,2,2,3,4]\n");
+            }
+        }
+
+        SECTION ("* and / works with scalar values") {
+            SECTION ("*  and / without cutOff") {
+                vData.setUseCutOffToRange(false);
+                vData = vData * 5;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[0,5,10,15,20,25,30,35,40,45]\n");
+                vData = vData / 5;
+                stringstream sstr2;
+                sstr2 << vData;
+                REQUIRE( sstr2.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
+            }
+
+            SECTION (" * with cutOff") {
+                vData.setUseCutOffToRange(true);
+                vData = vData * 5;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[2,5,7,7,7,7,7,7,7,7]\n");
+            }
+
+            SECTION (" / with cutOff") {
+                vData.setUseCutOffToRange(false);
+                vData = vData * 5;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[0,5,10,15,20,25,30,35,40,45]\n");
+                vData.setUseCutOffToRange(true);
+                vData = vData / 5;
+                stringstream sstr2;
+                sstr2 << vData;
+                REQUIRE( sstr2.str() == "[2,2,2,3,4,5,6,7,7,7]\n");
+            }
+        }
+
+        SECTION("+ and - works with other VectorData-objects") {
+            vData2 = vData;
+            SECTION ("+ and - works for VectorData-objects without cutOff") {
+                vData.setUseCutOffToRange(false);
+                vData = vData + vData2;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[0,2,4,6,8,10,12,14,16,18]\n");
+                vData = vData - vData2;
+                stringstream sstr2;
+                sstr2 << vData;
+                REQUIRE( sstr2.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
+            }
+
+            SECTION ("+ and - works for VectorData-objects with cutOff") {
+                vData.setUseCutOffToRange(true);
+                vData = vData + vData2;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[2,2,4,6,7,7,7,7,7,7]\n");
+                vData = vData - vData2;
+                stringstream sstr2;
+                sstr2 << vData;
+                REQUIRE( sstr2.str() == "[2,2,2,3,3,2,2,2,2,2]\n");
+            }
+
+            SECTION ("* and / works for VectorData-objects without cutOff") {
+                vData.setUseCutOffToRange(false);
+                vData = vData * vData2;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[0,1,4,9,16,25,36,49,64,81]\n");
+                vData = vData / vData2;
+                stringstream sstr2;
+                sstr2 << vData;
+                REQUIRE( sstr2.str() == "[0,1,2,3,4,5,6,7,8,9]\n");
+            }
+
+            SECTION ("* works for VectorData-objects with cutOff") {
+                vData.setUseCutOffToRange(true);
+                vData = vData * vData2;
+                sstr << vData;
+                REQUIRE( sstr.str() ==  "[2,2,4,7,7,7,7,7,7,7]\n");
+            }
+
+            SECTION ("/ works for VectorData-objects with cutOff") {
+                vData.setUseCutOffToRange(false);
+                vData = vData * vData2;
+                sstr << vData;
+                REQUIRE( sstr.str() == "[0,1,4,9,16,25,36,49,64,81]\n");
+                vData.setUseCutOffToRange(true);
+                vData = vData / vData2;
+                stringstream sstr2;
+                sstr2 << vData;
+                REQUIRE( sstr2.str() == "[2,2,2,3,4,5,6,7,7,7]\n");
+            }
+        }
+
+
     }
 }
