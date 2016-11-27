@@ -16,7 +16,7 @@
 using namespace std;
 
 /**
- * class
+ * class VectorData
  */
 class VectorData : public vector<double> {
     public:
