@@ -3,7 +3,7 @@
  * Purpose: implements class VectorData
  *
  * @author Wall.Of.Death
- * @version 2.0 20161125
+ * @version 2.2 20161127
  */
 
 #include "VectorData.h"
