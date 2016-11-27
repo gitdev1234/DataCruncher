@@ -466,8 +466,6 @@ VectorData VectorData::operator/=(double val_) {
     return (*this);
 }
 
-// ---
-
 /**
  * VectorData::operator +=
  * @brief addition-assignment-operator, adds two VectorData-objects, element by element and immediately assigns the result

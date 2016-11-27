@@ -3,7 +3,7 @@
  * Purpose: defines class VectorData
  *
  * @author Wall.Of.Death
- * @version 2.0 20160713
+ * @version 2.0 20161127
  */
 
 #ifndef VectorData_H
