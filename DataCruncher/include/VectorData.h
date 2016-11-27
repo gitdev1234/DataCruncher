@@ -53,6 +53,14 @@ class VectorData : public vector<double> {
         VectorData  operator- (const VectorData& val_) const;
         VectorData  operator* (const VectorData& val_) const;
         VectorData  operator/ (const VectorData& val_) const;
+        VectorData  operator+=(double val_);
+        VectorData  operator-=(double val_);
+        VectorData  operator*=(double val_);
+        VectorData  operator/=(double val_);
+        VectorData  operator+=(const VectorData& val_);
+        VectorData  operator-=(const VectorData& val_);
+        VectorData  operator*=(const VectorData& val_);
+        VectorData  operator/=(const VectorData& val_);
         friend ostream& operator<<(ostream& ostream_, const VectorData VectorData_);
         friend ostream& operator<<(ostream& ostream_, vector<double> val_);
 
