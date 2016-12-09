@@ -1,10 +1,10 @@
 # In repository we don't need to have:
 # Compiled object files, binaries, libs
 # Built windows .exe and linux binaries
-# NOTE: PROJECT is a your project's name, analog of PROJECT.exe in Linux
+# NOTE: DataCruncher is a your project's name, analog of DataCruncher.exe in Linux
 *.exe
 *.dll
-PROJECT
+DataCruncher
 *.slo
 *.lo
 *.o
