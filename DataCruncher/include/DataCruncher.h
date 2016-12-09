@@ -29,7 +29,7 @@ class DataCruncher {
         double& operator[](int index_);
 
         /* --- load / save --- */
-        bool loadFromFile();
+        bool loadFromFile(const string& path_,const string& separator_ = ",");
         bool saveToFile(const string& path_,const string& separator_ = ",", int decimalPlaces_ = 2) const;
         bool loadFromDataBase();
         bool saveToDataBase() const;
@@ -59,7 +59,9 @@ class DataCruncher {
 
     private:
         /* --- load / save --- */
+        bool loadFromCSVFile(const string& path_, const string& separator_ = ",");
         bool saveToCSVFile(const string& path_, const string& separator_ = ",", int decimalPlaces_ = 2) const;
+        bool loadFromBinaryFile(const string& path_);
         bool saveToBinaryFile(const string& path_) const;
         string getSuffixFromString(const string& val_) const;
 

@@ -63,7 +63,20 @@ TEST_CASE("file operations") {
         }
     }
 
-    SECTION("save any other paths with suffixes to a binary file") {
+    SECTION("load a *.csv-path as a CSV-file") {
+        string path;
+        DataCruncher DC2;
+        for (int i = 0; i < 3; i++) {
+            switch (i)  {
+                case 0 : path = "test.CSV"; break;
+                case 1 : path = "test.csv"; break;
+                case 2 : path = "test.cSv"; break;
+            }
+            REQUIRE(DC2.loadFromFile(path));
+        }
+    }
+
+    SECTION("save any other suffixes to a binary files") {
         string path;
         for (int i = 0; i < 3; i++) {
             switch (i)  {
@@ -72,6 +85,19 @@ TEST_CASE("file operations") {
                 case 2 : path = "test.12c!"; break;
             }
             REQUIRE(DC.saveToFile(path));
+        }
+    }
+
+    SECTION("load any other suffixes as a binary file") {
+        string path;
+        DataCruncher DC2;
+        for (int i = 0; i < 3; i++) {
+            switch (i)  {
+                case 0 : path = "test.bin"; break;
+                case 1 : path = "test.TeSt"; break;
+                case 2 : path = "test.12c!"; break;
+            }
+            REQUIRE(DC2.loadFromFile(path));
         }
     }
 }

@@ -14,6 +14,24 @@ double& DataCruncher::operator [](int index_) {
 }
 
 /* --- load / save --- */
+
+/**
+ * DataCruncher::loadFromFile
+ * @brief loads file to current vector data
+ * @param path_ path of file
+ * @param separator_ string which is used as separator in the csv-file, not used for binary files
+ * @return returns true, if file was sucessfully loaded, otherwise false
+ *
+ * if suffix of path_ is "csv" file is interpreted as a csv-file
+ * if suffix of path_ is "" vector data is not loaded, function returns false
+ * if suffix of path_ is not "" and not "csv" file is interpreted as binary file
+ *
+ * NOTE : is does not matter, if suffix is uppercase or lower case, or anything in between
+ */
+bool DataCruncher::loadFromFile(const string &path_, const string& separator_) {
+    return ( loadFromCSVFile(path_,separator_) || loadFromBinaryFile(path_) );
+}
+
 /**
  * DataCruncher::saveToFile
  * @brief saves current vector data to file
@@ -30,6 +48,23 @@ double& DataCruncher::operator [](int index_) {
  */
 bool DataCruncher::saveToFile(const string &path_, const string& separator_, int decimalPlaces_) const {
     return ( saveToCSVFile(path_,separator_,decimalPlaces_) || saveToBinaryFile(path_) );
+}
+
+/**
+ * DataCruncher::loadFromCSVFile
+ * @brief loads csv-file to the current vector data
+ * @param path_ path of file
+ * @param separator_ string which is used as separator in the csv-file
+ * @return returns true, if file was sucessfully loaded, otherwise false
+ */
+bool DataCruncher::loadFromCSVFile(const string &path_, const string& separator_) {
+    string suffixOfPath = getSuffixFromString(path_);
+
+    if (suffixOfPath == "CSV") {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -69,8 +104,23 @@ bool DataCruncher::saveToCSVFile(const string &path_, const string& separator_, 
 }
 
 /**
+ * DataCruncher::loadFromBinaryFile
+ * @brief loads binary file into current vector data
+ * @param path_ path of file
+ * @return returns true, if file was sucessfully loaded, otherwise false
+ */
+bool DataCruncher::loadFromBinaryFile(const string &path_) {
+    string suffixOfPath = getSuffixFromString(path_);
+    if ( (suffixOfPath != "") && (suffixOfPath != "CSV") ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
  * DataCruncher::saveToBinaryFile
- * @brief saves the current VectorData to a binary-file
+ * @brief saves the current vector data to a binary-file
  * @param path_ path of file
  * @return returns true, if file was sucessfully saved, otherwise false
  */
