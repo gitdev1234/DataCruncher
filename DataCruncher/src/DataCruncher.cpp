@@ -28,7 +28,7 @@ double& DataCruncher::operator [](int index_) {
  *
  * NOTE : is does not matter, if suffix is uppercase or lower case, or anything in between
  */
-bool DataCruncher::loadFromFile(const string &path_, const string& separator_) {
+bool DataCruncher::loadFromFile(const string &path_, char separator_) {
     return ( loadFromCSVFile(path_,separator_) || loadFromBinaryFile(path_) );
 }
 
@@ -46,7 +46,7 @@ bool DataCruncher::loadFromFile(const string &path_, const string& separator_) {
  *
  * NOTE : is does not matter, if suffix is uppercase or lower case, or anything in between
  */
-bool DataCruncher::saveToFile(const string &path_, const string& separator_, int decimalPlaces_) const {
+bool DataCruncher::saveToFile(const string &path_, char separator_, int decimalPlaces_) const {
     return ( saveToCSVFile(path_,separator_,decimalPlaces_) || saveToBinaryFile(path_) );
 }
 
@@ -57,11 +57,26 @@ bool DataCruncher::saveToFile(const string &path_, const string& separator_, int
  * @param separator_ string which is used as separator in the csv-file
  * @return returns true, if file was sucessfully loaded, otherwise false
  */
-bool DataCruncher::loadFromCSVFile(const string &path_, const string& separator_) {
+bool DataCruncher::loadFromCSVFile(const string &path_, char separator_) {
     string suffixOfPath = getSuffixFromString(path_);
 
     if (suffixOfPath == "CSV") {
-        return true;
+
+        ifstream file;
+        string valueAsString;
+        vData.clear();
+
+        file.open(path_);
+        if (file.is_open()) {
+
+            while(std::getline(file,valueAsString,separator_)) {
+                vData.push_back(stod(valueAsString));
+            }
+            return true;
+
+        } else {
+            return false;
+        }
     } else {
         return false;
     }
@@ -75,7 +90,7 @@ bool DataCruncher::loadFromCSVFile(const string &path_, const string& separator_
  * @param decimalPlaces_ specifies how many decimal places are printed out to the csv-file
  * @return returns true, if file was sucessfully saved, otherwise false
  */
-bool DataCruncher::saveToCSVFile(const string &path_, const string& separator_, int decimalPlaces_) const {
+bool DataCruncher::saveToCSVFile(const string &path_, char separator_, int decimalPlaces_) const {
     string suffixOfPath = getSuffixFromString(path_);
 
     if (suffixOfPath == "CSV") {
