@@ -29,4 +29,5 @@ SOURCES += main.cpp \
 HEADERS += \
     catch.hpp \
     include/VectorData.h \
-    include/DataCruncher.h
+    include/DataCruncher.h \
+    include/catch.hpp
