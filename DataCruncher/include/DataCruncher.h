@@ -9,7 +9,13 @@
 #ifndef DATACRUNCHER_H
 #define DATACRUNCHER_H
 
+
+#include <iostream>
+#include <algorithm>
+#include <string>
+//---
 #include "VectorData.h"
+
 
 
 class DataCruncher {
@@ -19,22 +25,22 @@ class DataCruncher {
 
         /* --- load / save --- */
         bool loadFromFile();
-        bool saveToFile();
+        bool saveToFile(const string& path_) const;
         bool loadFromDataBase();
-        bool saveToDataBase();
+        bool saveToDataBase() const;
 
         /* --- analyze --- */
 
         // statistic values
-        double calcAverage();
-        double calcMedian();
-        double calcStdDeviation();
-        double calcVariance();
-        double calcHistogramm();
+        double calcAverage() const;
+        double calcMedian() const;
+        double calcStdDeviation() const;
+        double calcVariance() const;
+        double calcHistogramm() const;
 
         // analytical values
-        double calcFourierTransform();
-        double calcTaylorSeries();
+        double calcFourierTransform() const;
+        double calcTaylorSeries() const;
 
         /* --- modify --- */
         VectorData removeErrors();
@@ -46,6 +52,11 @@ class DataCruncher {
 
     private:
         VectorData vData;
+
+        /* --- load / save --- */
+        bool saveToCSVFile(const string& path_) const;
+        bool saveToBinaryFile(const string& path_) const;
+        string getSuffixFromString(const string& val_) const;
 
 };
 
