@@ -1,3 +1,11 @@
+/**
+ * DataCruncher.h
+ * Purpose: defines class DataCruncher
+ *
+ * @author Wall.Of.Death
+ * @version 2.2
+ */
+
 #ifndef DATACRUNCHER_H
 #define DATACRUNCHER_H
 

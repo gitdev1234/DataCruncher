@@ -18,10 +18,13 @@ TEMPLATE = app
 
 
 INCLUDEPATH += include/
+INCLUDEPATH += test/
 
 SOURCES += main.cpp \
     src/VectorData.cpp \
-    src/DataCruncher.cpp
+    src/DataCruncher.cpp \
+    test/VectorDataTest.cpp \
+    test/DataCruncherTest.cpp
 
 HEADERS += \
     catch.hpp \
