@@ -11,8 +11,10 @@
 
 
 #include <iostream>
+#include <iomanip>
 #include <algorithm>
 #include <string>
+#include <fstream>
 //---
 #include "VectorData.h"
 
@@ -28,7 +30,7 @@ class DataCruncher {
 
         /* --- load / save --- */
         bool loadFromFile();
-        bool saveToFile(const string& path_) const;
+        bool saveToFile(const string& path_,const string& separator_ = ",", int decimalPlaces_ = 2) const;
         bool loadFromDataBase();
         bool saveToDataBase() const;
 
@@ -41,7 +43,7 @@ class DataCruncher {
         double calcVariance() const;
         double calcHistogramm() const;
 
-        // analytical values
+        // analytic values
         double calcFourierTransform() const;
         double calcTaylorSeries() const;
 
@@ -57,7 +59,7 @@ class DataCruncher {
 
     private:
         /* --- load / save --- */
-        bool saveToCSVFile(const string& path_) const;
+        bool saveToCSVFile(const string& path_, const string& separator_ = ",", int decimalPlaces_ = 2) const;
         bool saveToBinaryFile(const string& path_) const;
         string getSuffixFromString(const string& val_) const;
 

@@ -18,6 +18,8 @@ double& DataCruncher::operator [](int index_) {
  * DataCruncher::saveToFile
  * @brief saves current vector data to file
  * @param path_ path of file
+ * @param separator_ string which is used as separator in the csv-file, not used for binary files
+ * @param decimalPlaces_ specifies how many decimal places are printed out to the csv-file, not used for binary files
  * @return returns true, if file was sucessfully saved, otherwise false
  *
  * if suffix of path_ is "csv" vector data is saved to a csv-file
@@ -26,21 +28,41 @@ double& DataCruncher::operator [](int index_) {
  *
  * NOTE : is does not matter, if suffix is uppercase or lower case, or anything in between
  */
-bool DataCruncher::saveToFile(const string &path_) const {
-    return ( saveToCSVFile(path_) || saveToBinaryFile(path_) );
+bool DataCruncher::saveToFile(const string &path_, const string& separator_, int decimalPlaces_) const {
+    return ( saveToCSVFile(path_,separator_,decimalPlaces_) || saveToBinaryFile(path_) );
 }
 
 /**
  * DataCruncher::saveToCSVFile
  * @brief saves the current VectorData to a csv-file
  * @param path_ path of file
+ * @param separator_ string which is used as separator in the csv-file
+ * @param decimalPlaces_ specifies how many decimal places are printed out to the csv-file
  * @return returns true, if file was sucessfully saved, otherwise false
  */
-bool DataCruncher::saveToCSVFile(const string &path_) const {
+bool DataCruncher::saveToCSVFile(const string &path_, const string& separator_, int decimalPlaces_) const {
     string suffixOfPath = getSuffixFromString(path_);
-    if (suffixOfPath == "CSV")  {
 
-        return true;
+    if (suffixOfPath == "CSV") {
+
+        ofstream file;
+        file.open(path_, ios::trunc);
+        if (file.is_open()) {
+
+            file.setf(ios::floatfield,ios::fixed);
+            file.precision(decimalPlaces_);
+            for (int i = 0; i < vData.getSize(); i++) {
+                file << vData[i];
+                if (i < vData.getSize() - 1) {
+                    file << separator_ << flush;
+                }
+            }
+            file.close();
+            return true;
+
+        } else {
+            return false;
+        }
     } else {
         return false;
     }
