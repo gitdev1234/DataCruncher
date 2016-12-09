@@ -23,6 +23,9 @@ class DataCruncher {
         /* --- constructors / destructors --- */
         DataCruncher() {};
 
+        /* --- operators --- */
+        double& operator[](int index_);
+
         /* --- load / save --- */
         bool loadFromFile();
         bool saveToFile(const string& path_) const;
@@ -50,9 +53,9 @@ class DataCruncher {
         VectorData movingAverageFiltering();
 
 
-    private:
         VectorData vData;
 
+    private:
         /* --- load / save --- */
         bool saveToCSVFile(const string& path_) const;
         bool saveToBinaryFile(const string& path_) const;

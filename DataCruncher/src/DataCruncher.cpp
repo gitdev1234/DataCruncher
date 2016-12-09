@@ -8,10 +8,12 @@
 
 #include "DataCruncher.h"
 
+/* --- operators --- */
+double& DataCruncher::operator [](int index_) {
+    return vData[index_];
+}
+
 /* --- load / save --- */
-
-
-
 /**
  * DataCruncher::saveToFile
  * @brief saves current vector data to file
@@ -21,6 +23,8 @@
  * if suffix of path_ is "csv" vector data is saved to a csv-file
  * if suffix of path_ is "" vector data is not save to a file, function returns false
  * if suffix of path_ is not "" and not "csv" vector data is saved to a binary file
+ *
+ * NOTE : is does not matter, if suffix is uppercase or lower case, or anything in between
  */
 bool DataCruncher::saveToFile(const string &path_) const {
     return ( saveToCSVFile(path_) || saveToBinaryFile(path_) );
@@ -35,6 +39,7 @@ bool DataCruncher::saveToFile(const string &path_) const {
 bool DataCruncher::saveToCSVFile(const string &path_) const {
     string suffixOfPath = getSuffixFromString(path_);
     if (suffixOfPath == "CSV")  {
+
         return true;
     } else {
         return false;

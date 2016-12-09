@@ -18,10 +18,34 @@ TEST_CASE("constructor / destructor") {
     }
 }
 
+TEST_CASE("DataCruncher operators") {
+    DataCruncher DC;
+    SECTION("[] operator") {
+        for (int i = 0; i < 10; i++) {
+            DC.vData.push_back(i);
+        }
+        SECTION("setting values") {
+            for (int i = 0; i < 10; i++) {
+                DC[i] = i*2;
+                REQUIRE(DC.vData[i] == i*2);
+            }
+        }
+        SECTION("getting values") {
+            for (int i = 0; i < 10; i++) {
+                REQUIRE(DC[i] == DC.vData[i]);
+            }
+        }
+    }
+
+}
+
 TEST_CASE("file operations") {
     DataCruncher DC;
 
-    // TODO fill DC with values;
+    DC.vData.resize(3);
+    DC[0] = 10.000;
+    DC[1] = -32;
+    DC[2] = 435324.234123464576;
 
     SECTION("do not save path without suffix") {
         REQUIRE_FALSE(DC.saveToFile("test"));
