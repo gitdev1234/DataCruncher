@@ -142,7 +142,22 @@ bool DataCruncher::loadFromBinaryFile(const string &path_) {
 bool DataCruncher::saveToBinaryFile(const string &path_) const {
     string suffixOfPath = getSuffixFromString(path_);
     if ( (suffixOfPath != "") && (suffixOfPath != "CSV") ) {
-        return true;
+
+        ofstream file;
+        file.open(path_, ios::trunc | ios::binary);
+        if (file.is_open()) {
+
+            for (int i = 0; i < vData.getSize(); i++) {
+                //file << vData[i];
+            }
+            file << vData[0];
+            file.close();
+            return true;
+
+        } else {
+            return false;
+        }
+
     } else {
         return false;
     }
