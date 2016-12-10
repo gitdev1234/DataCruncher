@@ -76,7 +76,7 @@ TEST_CASE("file operations") {
             REQUIRE(DC2.loadFromFile(path));
             REQUIRE(DC.vData.getSize() == DC2.vData.getSize());
             for (int i2 = 0; i2 < DC.vData.getSize(); i2++) {
-                //REQUIRE( nearlyEqual(DC.vData[i2],DC2.vData[i2],tolerance));
+                REQUIRE( DC.vData.nearlyEqual(DC.vData[i2],DC2.vData[i2],TOLERANCE));
             }
         }
     }

@@ -98,7 +98,7 @@ TEST_CASE("min max cut-off") {
     }
 }
 
-TEST_CASE( "Test nearly equal" ) {
+TEST_CASE( "nearly equal" ) {
     VectorData vData;
     const double TOLERANCE = 0.05;
     REQUIRE(vData.nearlyEqual(0, 0.05,TOLERANCE));
