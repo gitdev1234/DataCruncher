@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <string>
 #include <fstream>
+#include <stdio.h>
 //---
 #include "VectorData.h"
 
@@ -54,7 +55,7 @@ class DataCruncher {
         VectorData integrate();
         VectorData movingAverageFiltering();
 
-
+        /* --- public members --- */
         VectorData vData;
 
     private:

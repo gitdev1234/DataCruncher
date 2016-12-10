@@ -125,6 +125,7 @@ bool DataCruncher::saveToCSVFile(const string &path_, char separator_, int decim
  * @return returns true, if file was sucessfully loaded, otherwise false
  */
 bool DataCruncher::loadFromBinaryFile(const string &path_) {
+    //TODO
     string suffixOfPath = getSuffixFromString(path_);
     if ( (suffixOfPath != "") && (suffixOfPath != "CSV") ) {
         return true;
@@ -140,18 +141,16 @@ bool DataCruncher::loadFromBinaryFile(const string &path_) {
  * @return returns true, if file was sucessfully saved, otherwise false
  */
 bool DataCruncher::saveToBinaryFile(const string &path_) const {
+    //TODO
     string suffixOfPath = getSuffixFromString(path_);
     if ( (suffixOfPath != "") && (suffixOfPath != "CSV") ) {
 
-        ofstream file;
-        file.open(path_, ios::trunc | ios::binary);
-        if (file.is_open()) {
-
-            for (int i = 0; i < vData.getSize(); i++) {
-                //file << vData[i];
-            }
-            file << vData[0];
-            file.close();
+        FILE* file;
+        // wb = write, binary
+        file = fopen(path_.c_str(),"wb");
+        if (file != NULL) {
+            fwrite(&vData[0],sizeof(double),vData.getSize(),file);
+            fclose(file);
             return true;
 
         } else {
