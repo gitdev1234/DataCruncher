@@ -6,6 +6,7 @@
  * @version 2.2
  */
 
+#include <cmath>
 #include "VectorData.h"
 
 /* --- constructors / destructors --- */
@@ -135,6 +136,18 @@ double VectorData::cutOffToRange(double val_) const {
         }
     }
     return val_;
+}
+
+/**
+ * VectorData::nearlyEqual
+ * @brief compares if val1_ and val2_, referring to tolerance_, are nearly equal
+ * @param val1_ value no. 1, which is to compare with val2_
+ * @param val2_ value no. 2, which is to compare with val1_
+ * @param tolerance_ tolerance value which the comparison is referring to
+ * @return returns true if val1_ = val2_ +- tolerance_, otherwise false
+ */
+bool VectorData::nearlyEqual(double val1_, double val2_, double tolerance_) const {
+    return ( fabs (val1_ - val2_)  <= tolerance_ );
 }
 
 /* --- operators --- */

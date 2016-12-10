@@ -98,6 +98,36 @@ TEST_CASE("min max cut-off") {
     }
 }
 
+TEST_CASE( "Test nearly equal" ) {
+    VectorData vData;
+    const double TOLERANCE = 0.05;
+    REQUIRE(vData.nearlyEqual(0, 0.05,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(0,-0.05,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(0, 0.04,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(0,-0.04,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual(0, 0.06,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual(0,-0.06,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.02,-0.07,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.02, 0.03,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.02,-0.06,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.02, 0.02,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual(-0.02,-0.08,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual(-0.02, 0.04,TOLERANCE));
+
+    REQUIRE(vData.nearlyEqual( 0.05,0,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.05,0,TOLERANCE));
+    REQUIRE(vData.nearlyEqual( 0.04,0,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.04,0,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual( 0.06,0,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual(-0.06,0,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.07,-0.02,TOLERANCE));
+    REQUIRE(vData.nearlyEqual( 0.03,-0.02,TOLERANCE));
+    REQUIRE(vData.nearlyEqual(-0.06,-0.02,TOLERANCE));
+    REQUIRE(vData.nearlyEqual( 0.02,-0.02,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual(-0.08,-0.02,TOLERANCE));
+    REQUIRE_FALSE(vData.nearlyEqual( 0.04,-0.02,TOLERANCE));
+}
+
 TEST_CASE("operators") {
     VectorData vData, vData2;
     for (int i = 0; i< 10; i++) {

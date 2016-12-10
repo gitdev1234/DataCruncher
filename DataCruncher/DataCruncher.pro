@@ -24,10 +24,12 @@ SOURCES += main.cpp \
     src/VectorData.cpp \
     src/DataCruncher.cpp \
     test/VectorDataTest.cpp \
-    test/DataCruncherTest.cpp
+    test/DataCruncherTest.cpp \
+    test/MiscellaneousTest.cpp
 
 HEADERS += \
     catch.hpp \
     include/VectorData.h \
     include/DataCruncher.h \
-    include/catch.hpp
+    include/catch.hpp \
+    include/Types.h

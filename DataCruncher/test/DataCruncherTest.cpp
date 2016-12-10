@@ -41,6 +41,7 @@ TEST_CASE("DataCruncher operators") {
 
 TEST_CASE("file operations") {
     DataCruncher DC;
+    const double TOLERANCE = 0.000001;
 
     DC.vData.resize(3);
     DC[0] = 10.000;
@@ -59,7 +60,7 @@ TEST_CASE("file operations") {
                 case 1 : path = "test.csv"; break;
                 case 2 : path = "test.cSv"; break;
             }
-            REQUIRE(DC.saveToFile(path));
+            REQUIRE(DC.saveToFile(path,',',10));
         }
     }
 
@@ -73,6 +74,10 @@ TEST_CASE("file operations") {
                 case 2 : path = "test.cSv"; break;
             }
             REQUIRE(DC2.loadFromFile(path));
+            REQUIRE(DC.vData.getSize() == DC2.vData.getSize());
+            for (int i2 = 0; i2 < DC.vData.getSize(); i2++) {
+                //REQUIRE( nearlyEqual(DC.vData[i2],DC2.vData[i2],tolerance));
+            }
         }
     }
 

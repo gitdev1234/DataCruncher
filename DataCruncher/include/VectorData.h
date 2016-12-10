@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include <float.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -33,6 +34,7 @@ class VectorData : public vector<double> {
         int    getSize       ()            const;
         double getValueAt    (int index_)  const;
         double cutOffToRange (double val_) const;
+        bool   nearlyEqual   (double val1_, double val2_, double tolerance_) const;
 
         /* --- getter / setter --- */
         bool    getUseCutOffToRange () const    {return useCutOffToRange;};
