@@ -46,7 +46,8 @@ bool DataCruncher::loadFromFile(const string &path_, char separator_) {
  *
  * NOTE : is does not matter, if suffix is uppercase or lower case, or anything in between
  */
-bool DataCruncher::saveToFile(const string &path_, char separator_, int decimalPlaces_) const {
+// TODO const
+bool DataCruncher::saveToFile(const string &path_, char separator_, int decimalPlaces_) {
     return ( saveToCSVFile(path_,separator_,decimalPlaces_) || saveToBinaryFile(path_) );
 }
 
@@ -140,7 +141,8 @@ bool DataCruncher::loadFromBinaryFile(const string &path_) {
  * @param path_ path of file
  * @return returns true, if file was sucessfully saved, otherwise false
  */
-bool DataCruncher::saveToBinaryFile(const string &path_) const {
+// TODO const
+bool DataCruncher::saveToBinaryFile(const string &path_) {
     //TODO
     string suffixOfPath = getSuffixFromString(path_);
     if ( (suffixOfPath != "") && (suffixOfPath != "CSV") ) {
@@ -149,8 +151,21 @@ bool DataCruncher::saveToBinaryFile(const string &path_) const {
         // wb = write, binary
         file = fopen(path_.c_str(),"wb");
         if (file != NULL) {
-            fwrite(&vData[0],sizeof(double),vData.getSize(),file);
+            //fwrite(&vData[0],sizeof(double),vData.getSize(),file);
             fclose(file);
+
+            vData[0] = 0;
+            vData[1] = 0;
+            vData[2] = 0;
+
+            file = fopen(path_.c_str(),"rb");
+            if (file != NULL) {
+                fread(&vData[0],sizeof(double),3,file);
+                fclose(file);
+                for (int i = 0; i < vData.getSize(); i++) {
+                    cout << i << " : " << vData[i];
+                }
+            }
             return true;
 
         } else {
