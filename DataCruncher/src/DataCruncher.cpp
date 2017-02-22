@@ -194,6 +194,11 @@ string DataCruncher::getSuffixFromString(const string& val_) const {
         return suffix;
     }
 }
+
+/**
+ * @brief DataCruncher::calcAverage
+ * @return
+ */
 double DataCruncher::calcAverage() const {
     double average = 0;
     for ( int pos = 0; pos < vData.size(); pos++) {

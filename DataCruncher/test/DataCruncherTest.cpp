@@ -1,5 +1,5 @@
 /**
- * VectorDataTest.cpp
+ * DataCruncherTest.cpp
  * Purpose: implements unit-tests for the DataCruncher-class
  *
  * @author Wall.Of.Death
