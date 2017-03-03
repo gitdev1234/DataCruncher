@@ -26,7 +26,7 @@ SOURCES += main.cpp \
     test/VectorDataTest.cpp \
     test/DataCruncherTest.cpp \
     test/MiscellaneousTest.cpp \
-    test/datacruncheranalysetest.cpp
+    test/DataCruncherAnalyseTest.cpp
 
 HEADERS += \
     catch.hpp \
