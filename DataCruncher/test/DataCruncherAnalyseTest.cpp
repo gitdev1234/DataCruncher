@@ -13,17 +13,10 @@
 #include "DataCruncher.h"
 
 TEST_CASE("Test DataCruncher.calcAverage") {
-    DataCruncher dCruncher;
+    DataCruncher DC;
     SECTION("calcAverage with integers") {
-        dCruncher.vData.push_back(3);
-        dCruncher.vData.push_back(6);
-        dCruncher.vData.push_back(-3);
-        dCruncher.vData.push_back(5);
-        dCruncher.vData.push_back(7);
-        dCruncher.vData.push_back(2);
-        dCruncher.vData.push_back(1);
-        dCruncher.vData.push_back(6);
-        REQUIRE (dCruncher.calcAverage() == 3.375);
+        DC.vData = {3,6,-3,5,7,2,1,6};
+        REQUIRE (DC.calcAverage() == 3.375);
 
     }
 }
