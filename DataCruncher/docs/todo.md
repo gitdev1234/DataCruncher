@@ -2,20 +2,31 @@
 
 ##VectorData class
 
-##DataCruncher class
+##DataCruncher class (gitdev1234)
 - [ ] load / save
-  - [ ] load csv
-  - [ ] write csv
+  - [x] load csv
+  - [x] write csv
   - [ ] load binary
   - [ ] write binary
 
 - [ ] analyze 
-  - [ ] statistic values
-    - [ ] calcAverage() code
-    - [ ] calcMedian() const;
-    - [ ] calcStdDeviation() const;
-    - [ ] calcVariance() const;
-    - [ ] calcHistogramm() const;
+  - [ ] statistic values (Gitdev42)
+    - [ ] calcAverage()
+      - [x] code
+      - [ ] test
+    - [ ] calcMedian()
+      - [x] code
+      - [ ] test
+    - [ ] calcStdDeviation() 
+      - [x] code
+      - [ ] test
+    - [ ] calcVariance()
+      - [x] code
+      - [ ] test
+    - [ ] calcHistogramm()      
+      - [x] code
+      - [ ] test
+
 
   - [ ] analytic values
     - [ ] calcFourierTransform() const;
