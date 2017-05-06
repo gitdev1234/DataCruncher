@@ -129,6 +129,29 @@ bool DataCruncher::loadFromBinaryFile(const string &path_) {
     //TODO
     string suffixOfPath = getSuffixFromString(path_);
     if ( (suffixOfPath != "") && (suffixOfPath != "CSV") ) {
+
+        FILE* file;
+        // rb = write, binary
+        file = fopen(path_.c_str(),"rb");
+        if (file != NULL) {
+
+            // obtain file size:
+            fseek (file , 0 , SEEK_END);
+            long sizeInBytes = ftell (file);
+            rewind (file);
+
+            vData.resize(sizeInBytes/sizeof(vData[0]));
+
+            double* startAddressOfData = &vData[0];
+            fread(startAddressOfData,sizeof(vData[0]),vData.getSize(),file);
+            fclose(file);
+
+            return true;
+        } else {
+            return false;
+        }
+
+
         return true;
     } else {
         return false;
@@ -151,23 +174,12 @@ bool DataCruncher::saveToBinaryFile(const string &path_) {
         // wb = write, binary
         file = fopen(path_.c_str(),"wb");
         if (file != NULL) {
-            //fwrite(&vData[0],sizeof(double),vData.getSize(),file);
+
+            double* startAddressOfData = &vData[0];
+            fwrite(startAddressOfData,sizeof(vData[0]),vData.getSize(),file);
             fclose(file);
 
-            vData[0] = 0;
-            vData[1] = 0;
-            vData[2] = 0;
-
-            file = fopen(path_.c_str(),"rb");
-            if (file != NULL) {
-                fread(&vData[0],sizeof(double),3,file);
-                fclose(file);
-                for (int i = 0; i < vData.getSize(); i++) {
-                    cout << i << " : " << vData[i];
-                }
-            }
             return true;
-
         } else {
             return false;
         }

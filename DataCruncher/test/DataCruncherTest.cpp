@@ -66,13 +66,13 @@ TEST_CASE("file operations") {
 
     SECTION("load a *.csv-path as a CSV-file") {
         string path;
-        DataCruncher DC2;
         for (int i = 0; i < 3; i++) {
             switch (i)  {
                 case 0 : path = "test.CSV"; break;
                 case 1 : path = "test.csv"; break;
                 case 2 : path = "test.cSv"; break;
             }
+            DataCruncher DC2;
             REQUIRE(DC2.loadFromFile(path));
             REQUIRE(DC.vData.getSize() == DC2.vData.getSize());
             for (int i2 = 0; i2 < DC.vData.getSize(); i2++) {
@@ -95,14 +95,20 @@ TEST_CASE("file operations") {
 
     SECTION("load any other suffixes as a binary file") {
         string path;
-        DataCruncher DC2;
+
         for (int i = 0; i < 3; i++) {
             switch (i)  {
                 case 0 : path = "test.bin"; break;
                 case 1 : path = "test.TeSt"; break;
                 case 2 : path = "test.12c!"; break;
             }
+            DataCruncher DC2;
             REQUIRE(DC2.loadFromFile(path));
+            REQUIRE(DC.vData.getSize() == DC2.vData.getSize());
+            for (int i2 = 0; i2 < DC.vData.getSize(); i2++) {
+                REQUIRE( DC.vData.nearlyEqual(DC.vData[i2],DC2.vData[i2],TOLERANCE));
+            }
+
         }
     }
 }
