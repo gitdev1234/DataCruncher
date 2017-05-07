@@ -6,8 +6,10 @@
 - [ ] load / save
   - [x] load csv
   - [x] write csv
-  - [ ] load binary
-  - [ ] write binary
+  - [x] load binary
+  - [x] write binary
+  - [ ] more test cases
+  - [ ] code review 
 
 - [ ] analyze 
   - [ ] statistic values (Gitdev42)
@@ -26,7 +28,6 @@
     - [ ] calcHistogramm()      
       - [x] code
       - [ ] test
-
 
   - [ ] analytic values
     - [ ] calcFourierTransform() const;
