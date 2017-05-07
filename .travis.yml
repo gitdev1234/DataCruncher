@@ -1,6 +1,6 @@
 language: cpp
 
 script:
- - cd build-DataCruncher-Desktop-Debug
+ - cd DataCruncher
  - make
  - ./DataCruncher
