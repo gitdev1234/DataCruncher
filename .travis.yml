@@ -13,3 +13,4 @@ script:
   - cd DataCruncher
   - /opt/qt55/bin/qmake
   - make
+  - ./DataCruncher
