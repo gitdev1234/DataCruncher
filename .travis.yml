@@ -14,3 +14,7 @@ script:
   - /opt/qt55/bin/qmake
   - make
   - ./DataCruncher
+
+# ./Gemfile
+
+gem 'coveralls', require: false
