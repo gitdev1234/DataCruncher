@@ -7,8 +7,6 @@ before_install:
 
 install:
   - sudo apt-get -y install qt55[QTPACKAGE]
-
-before_build: 
   - sudo pip install --user pyyaml cpp-coveralls
 
 script:
