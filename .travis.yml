@@ -10,7 +10,6 @@ install:
   - sudo apt-get -y install qt55[QTPACKAGE]
 
 script:
-  - sudo ./configure --enable-gcov 
   - source /opt/qt55/bin/qt55-env.sh
   - cd DataCruncher
   - /opt/qt55/bin/qmake
