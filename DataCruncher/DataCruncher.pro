@@ -13,6 +13,8 @@ CONFIG   += console
 CONFIG   -= app_bundle
 #CONFIG   += c++11
 QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += --coverage
+QMAKE_LFLAGS += --coverage
 
 TEMPLATE = app
 

@@ -15,6 +15,5 @@ script:
   - make
   - ./DataCruncher
 
-# ./Gemfile
-
-gem 'coveralls', require: false
+after_success:
+  - coveralls
