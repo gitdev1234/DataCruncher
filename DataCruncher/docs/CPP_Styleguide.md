@@ -85,7 +85,7 @@ class car {
 
 
 ##Declaration and implementation
-- every class, with all his functions and attributes is declarated in a header-file
+- every class, with all its functions and attributes is declarated in a header-file
 - all functions except for getters and setters are implemented in a *.cpp - file
 - if structs and constants do not directly belong to a class define them in the Types.h - file
 
@@ -137,7 +137,7 @@ class car {
  }
 ```
 
-- The code has to be documented by inline-comments. Use as much documentation as possible. But do not write more documentation as code.
+- The code has to be documented by inline-comments. Use as much documentation as possible. But do not write more documentation than code.
 
 ##Testing
 - Every function needs a Unit-Test.
