@@ -1,8 +1,8 @@
-#TODO-List of the DataCruncher-Project
+# TODO-List of the DataCruncher-Project
 
-##VectorData class
+## VectorData class
 
-##DataCruncher class (gitdev1234)
+## DataCruncher class (gitdev1234)
 - [ ] load / save
   - [x] load csv
   - [x] write csv
@@ -41,7 +41,7 @@
   - [ ] movingAverageFiltering();
 
 
-##docs
+## docs
 - [x] write readme.md
 - [ ] write test-documentation
-- [ ] review styleguide.md
+- [x] review styleguide.md
