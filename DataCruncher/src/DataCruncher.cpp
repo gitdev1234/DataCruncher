@@ -317,7 +317,7 @@ string DataCruncher::getSuffixFromString(const string& val_) const {
  */
 double DataCruncher::calcAverage() const {
     double average = 0;
-    for ( int pos = 0; pos < vData.size(); pos++) {
+    for ( int pos = 0; pos < vData.getSize(); pos++) {
         average += vData[pos];
     }
     return (double) average/(double) vData.size();
