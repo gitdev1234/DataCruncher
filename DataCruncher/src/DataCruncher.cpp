@@ -323,3 +323,19 @@ double DataCruncher::calcAverage() const {
     return (double) average/(double) vData.size();
 
 }
+
+/* --- modify --- */
+VectorData DataCruncher::removeErrors() {};
+
+/**
+ * @brief DataCruncher::zTransform
+ * @return
+ */
+VectorData DataCruncher::zTransform() {
+
+};
+
+
+VectorData DataCruncher::differentiate() {};
+VectorData DataCruncher::integrate() {};
+VectorData DataCruncher::movingAverageFiltering() {};

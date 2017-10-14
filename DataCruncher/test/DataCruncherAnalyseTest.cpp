@@ -17,6 +17,5 @@ TEST_CASE("Test DataCruncher.calcAverage") {
     SECTION("calcAverage with integers") {
         DC.vData = {3,6,-3,5,7,2,1,6};
         REQUIRE (DC.calcAverage() == 3.375);
-
     }
 }

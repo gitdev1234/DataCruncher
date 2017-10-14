@@ -17,4 +17,4 @@ script:
   - ./DataCruncher
 
 after_success:
-  - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
+  - coveralls --exclude lib --exclude tests --gcov-options '\-lp' --exclude include/catch.hpp
