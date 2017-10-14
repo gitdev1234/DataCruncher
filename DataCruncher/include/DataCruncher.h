@@ -41,6 +41,7 @@ class DataCruncher {
         double calcStdDeviation() const;
         double calcVariance() const;
         double calcHistogramm() const;
+        void calcAllStatisticValues();
 
         // analytic values
         double calcFourierTransform() const;
@@ -48,7 +49,7 @@ class DataCruncher {
 
         /* --- modify --- */
         VectorData removeErrors();
-        VectorData zTransform();
+        VectorData zTransform(bool changeLocalVectorData_ = true);
         VectorData differentiate();
         VectorData integrate();
         VectorData movingAverageFiltering();
@@ -56,13 +57,38 @@ class DataCruncher {
         /* --- public members --- */
         VectorData vData;
 
-    private:
+        /* --- getters / setters --- */
+
+
+        double getAverage() const;
+        void setAverage(double average_);
+
+        double getMedian() const;
+        void setMedian(double median_);
+
+        double getStdDeviation() const;
+        void setStdDeviation(double stdDeviation_);
+
+        double getVariance() const;
+        void setVariance(double variance_);
+
+private:
         /* --- load / save --- */
         int loadFromCSVFile(const string& path_, char separator_ = ',');
         int saveToCSVFile(const string& path_, char separator_ = ',', int decimalPlaces_ = 2) const;
         int loadFromBinaryFile(const string& path_);
         int saveToBinaryFile(const string& path_) const;
         string getSuffixFromString(const string& val_) const;
+
+        // miscellaneous
+        bool statisticValuesAreUpToDate = false;
+
+        // statistic values of vData
+        double average;
+        double median;
+        double stdDeviation;
+        double variance;
+        //double calcHistogramm() const;        todo
 
 };
 

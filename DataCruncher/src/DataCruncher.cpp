@@ -311,6 +311,42 @@ string DataCruncher::getSuffixFromString(const string& val_) const {
     }
 }
 
+double DataCruncher::getVariance() const {
+    return variance;
+}
+
+void DataCruncher::setVariance(double variance_) {
+    variance = variance_;
+}
+
+double DataCruncher::getStdDeviation() const {
+    return stdDeviation;
+}
+
+void DataCruncher::setStdDeviation(double stdDeviation_) {
+    stdDeviation = stdDeviation_;
+}
+
+double DataCruncher::getMedian() const {
+    return median;
+}
+
+void DataCruncher::setMedian(double median_) {
+    median = median_;
+}
+
+double DataCruncher::getAverage() const {
+    return average;
+}
+
+void DataCruncher::setAverage(double average_) {
+    average = average_;
+}
+
+/* --- analyze --- */
+
+// statistic values
+
 /**
  * @brief DataCruncher::calcAverage
  * @return
@@ -324,6 +360,11 @@ double DataCruncher::calcAverage() const {
 
 }
 
+void DataCruncher::calcAllStatisticValues() {
+    setAverage(calcAverage());
+    // todo go on here
+}
+
 /* --- modify --- */
 VectorData DataCruncher::removeErrors() {};
 
@@ -331,7 +372,7 @@ VectorData DataCruncher::removeErrors() {};
  * @brief DataCruncher::zTransform
  * @return
  */
-VectorData DataCruncher::zTransform() {
+VectorData DataCruncher::zTransform(bool changeLocalVectorData_) {
 
 };
 
