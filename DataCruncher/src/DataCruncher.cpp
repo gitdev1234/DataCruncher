@@ -491,9 +491,14 @@ VectorData DataCruncher::undoZTransform(double averageBeforeZ_, double stdDeviat
 }
 
 /**
- * @brief DataCruncher::differentiate
- * @param changeLocalVectorData_
- * @return
+ * DataCruncher::differentiate
+ * @brief differentiates data of vData
+ * @param changeLocalVectorData_ false if this function has to work on a copy of vData, true if it works on the member vData
+ * @return returns an VectorData-object with differentiated data of vData
+ *
+ * Please note : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
+ * vData of this class. If changeLocalVectorData_ = false the returned value is a copy of the local member variable vData.
+ * In this case vData is not modified.
  */
 VectorData DataCruncher::differentiate(bool changeLocalVectorData_) {
     VectorData *result;
