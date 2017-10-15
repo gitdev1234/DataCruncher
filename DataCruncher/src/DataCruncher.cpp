@@ -411,16 +411,83 @@ VectorData DataCruncher::removeErrors(bool changeLocalVectorData_) {
 }
 
 /**
- * @brief DataCruncher::zTransform
- * @return
+ * DataCruncher::zTransform
+ * @brief z-transforms the data of vData
+ * @param changeLocalVectorData_ false if this function has to work on a copy of vData, true if it works on the member vData
+ * @return returns an VectorData-object with the values of vData after a z-transformation
+ * This function z-Transforms the data within vData. After the z-transformation the data
+ * has an average of 0 and an variance of 1.
+ * The z-transformation can get used to standardize data of different scales. This makes the data more comparable.
+ *
+ * Please note : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
+ * vData of this class. If changeLocalVectorData_ = false the returned value is a copy of the local member variable vData.
+ * In this case vData is not modified.
  */
 VectorData DataCruncher::zTransform(bool changeLocalVectorData_) {
+    VectorData *result;
+    VectorData newVData;
+
+    // calc average and standard deviation if necessary
+    if (! getStatisticValuesAreUpToDate()) {
+        setAverage(this->calcAverage());
+        setStdDeviation(this->calcStdDeviation());
+    }
+
+    // if zTransform has to change local vectorData
+    // result will point to this.vData
+    // if not, it will point to a new created copy of this.vData
     if (changeLocalVectorData_) {
-        // todo
+        result = &vData;  // this is no copy
         setStatisticValuesAreUpToDate(false);
     } else {
-
+        newVData = vData; // this is a copy
+        result = &newVData;
     }
+
+    // z-transform(x) = (x - average) / stdDeviation
+    *result -= getAverage();
+    if (stdDeviation != 0) {
+        *result /= getStdDeviation();
+    }
+
+    return *result;
+
+}
+
+/**
+ * DataCruncher::undoZTransform
+ * @brief undos the z-transformation of vData
+ * @param averageBeforeZ_ average value of vData before z-transformation
+ * @param stdDeviationBeforeZ_ standard deviation value of vData before z-transformation
+ * @param changeLocalVectorData_ false if this function has to work on a copy of vData, true if it works on the member vData
+ * @return returns an VectorData-object with original values before z-transformation
+ *
+ * Please note : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
+ * vData of this class. If changeLocalVectorData_ = false the returned value is a copy of the local member variable vData.
+ * In this case vData is not modified.
+ */
+VectorData DataCruncher::undoZTransform(double averageBeforeZ_, double stdDeviationBeforeZ_, bool changeLocalVectorData_) {
+    VectorData *result;
+    VectorData newVData;
+
+    // if zTransform has to change local vectorData
+    // result will point to this.vData
+    // if not, it will point to a new created copy of this.vData
+    if (changeLocalVectorData_) {
+        result = &vData;  // this is no copy
+        setStatisticValuesAreUpToDate(false);
+    } else {
+        newVData = vData; // this is a copy
+        result = &newVData;
+    }
+
+    // z-transform(x) = (x - average) / stdDeviation
+    // --> x(z-transform) = (z-transform * stdDeviation) + average
+    *result *= stdDeviationBeforeZ_;
+    *result += averageBeforeZ_;
+
+    return *result;
+
 }
 
 /**

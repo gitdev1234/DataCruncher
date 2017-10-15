@@ -50,6 +50,7 @@ class DataCruncher {
         /* --- modify --- */
         VectorData removeErrors(bool changeLocalVectorData_ = true);
         VectorData zTransform(bool changeLocalVectorData_ = true);
+        VectorData undoZTransform(double averageBeforeZ_, double stdDeviationBeforeZ_, bool changeLocalVectorData_ = true);
         VectorData differentiate(bool changeLocalVectorData_ = true);
         VectorData integrate(bool changeLocalVectorData_ = true);
         VectorData movingAverageFiltering(bool changeLocalVectorData_ = true);
