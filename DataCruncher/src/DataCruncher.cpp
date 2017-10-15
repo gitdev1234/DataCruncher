@@ -496,12 +496,31 @@ VectorData DataCruncher::undoZTransform(double averageBeforeZ_, double stdDeviat
  * @return
  */
 VectorData DataCruncher::differentiate(bool changeLocalVectorData_) {
+    VectorData *result;
+    VectorData newVData, originalVData;
+
+    // if zTransform has to change local vectorData
+    // result will point to this.vData
+    // if not, it will point to a new created copy of this.vData
     if (changeLocalVectorData_) {
-        // todo
+        result = &vData;  // this is no copy
         setStatisticValuesAreUpToDate(false);
     } else {
-
+        newVData = vData; // this is a copy
+        result = &newVData;
     }
+
+    originalVData = *result;
+
+
+    for (int i = 1; i < result->getSize() - 1; i++) {
+        (*result)[i] = ((originalVData[i+1] - originalVData[i-1]) / (double) 2);
+    }
+    // borders
+    (*result)[0] = (*result)[1];
+    (*result)[result->getSize() - 1] = (*result)[result->getSize() - 2];
+
+    return *result;
 }
 
 /**
