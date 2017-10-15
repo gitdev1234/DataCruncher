@@ -311,6 +311,17 @@ string DataCruncher::getSuffixFromString(const string& val_) const {
     }
 }
 
+
+/* --- getters / setters --- */
+
+bool DataCruncher::getStatisticValuesAreUpToDate() const {
+    return statisticValuesAreUpToDate;
+}
+
+void DataCruncher::setStatisticValuesAreUpToDate(bool statisticValuesAreUpToDate_) {
+    statisticValuesAreUpToDate = statisticValuesAreUpToDate_;
+}
+
 double DataCruncher::getVariance() const {
     return variance;
 }
@@ -356,27 +367,100 @@ double DataCruncher::calcAverage() const {
     for ( int pos = 0; pos < vData.getSize(); pos++) {
         average += vData[pos];
     }
-    return (double) average/(double) vData.size();
 
+    return (double) average/(double) vData.size();
+}
+
+double DataCruncher::calcMedian() const {
+    return 0;
+}
+
+double DataCruncher::calcStdDeviation() const {
+    return 0;
+}
+
+double DataCruncher::calcVariance() const {
+    return 0;
+}
+
+double DataCruncher::calcHistogramm() const {
+    return 0;
 }
 
 void DataCruncher::calcAllStatisticValues() {
     setAverage(calcAverage());
-    // todo go on here
+    setMedian(calcMedian());
+    setStdDeviation(calcStdDeviation());
+    setVariance(calcVariance());
+    setStatisticValuesAreUpToDate(true);
 }
 
 /* --- modify --- */
-VectorData DataCruncher::removeErrors() {};
+/**
+ * @brief DataCruncher::removeErrors
+ * @param changeLocalVectorData_
+ * @return
+ */
+VectorData DataCruncher::removeErrors(bool changeLocalVectorData_) {
+    if (changeLocalVectorData_) {
+        // todo
+        setStatisticValuesAreUpToDate(false);
+    } else {
+
+    }
+}
 
 /**
  * @brief DataCruncher::zTransform
  * @return
  */
 VectorData DataCruncher::zTransform(bool changeLocalVectorData_) {
+    if (changeLocalVectorData_) {
+        // todo
+        setStatisticValuesAreUpToDate(false);
+    } else {
 
-};
+    }
+}
 
+/**
+ * @brief DataCruncher::differentiate
+ * @param changeLocalVectorData_
+ * @return
+ */
+VectorData DataCruncher::differentiate(bool changeLocalVectorData_) {
+    if (changeLocalVectorData_) {
+        // todo
+        setStatisticValuesAreUpToDate(false);
+    } else {
 
-VectorData DataCruncher::differentiate() {};
-VectorData DataCruncher::integrate() {};
-VectorData DataCruncher::movingAverageFiltering() {};
+    }
+}
+
+/**
+ * @brief DataCruncher::integrate
+ * @param changeLocalVectorData_
+ * @return
+ */
+VectorData DataCruncher::integrate(bool changeLocalVectorData_) {
+    if (changeLocalVectorData_) {
+        // todo
+        setStatisticValuesAreUpToDate(false);
+    } else {
+
+    }
+}
+
+/**
+ * @brief DataCruncher::movingAverageFiltering
+ * @param changeLocalVectorData_
+ * @return
+ */
+VectorData DataCruncher::movingAverageFiltering(bool changeLocalVectorData_) {
+    if (changeLocalVectorData_) {
+        // todo
+        setStatisticValuesAreUpToDate(false);
+    } else {
+
+    }
+}

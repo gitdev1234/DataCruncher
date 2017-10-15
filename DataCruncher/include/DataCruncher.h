@@ -41,24 +41,25 @@ class DataCruncher {
         double calcStdDeviation() const;
         double calcVariance() const;
         double calcHistogramm() const;
-        void calcAllStatisticValues();
+        void  calcAllStatisticValues();
 
         // analytic values
         double calcFourierTransform() const;
         double calcTaylorSeries() const;
 
         /* --- modify --- */
-        VectorData removeErrors();
+        VectorData removeErrors(bool changeLocalVectorData_ = true);
         VectorData zTransform(bool changeLocalVectorData_ = true);
-        VectorData differentiate();
-        VectorData integrate();
-        VectorData movingAverageFiltering();
+        VectorData differentiate(bool changeLocalVectorData_ = true);
+        VectorData integrate(bool changeLocalVectorData_ = true);
+        VectorData movingAverageFiltering(bool changeLocalVectorData_ = true);
 
         /* --- public members --- */
         VectorData vData;
 
         /* --- getters / setters --- */
-
+        bool getStatisticValuesAreUpToDate() const;
+        void setStatisticValuesAreUpToDate(bool statisticValuesAreUpToDate_);
 
         double getAverage() const;
         void setAverage(double average_);
