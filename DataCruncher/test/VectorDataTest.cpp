@@ -27,6 +27,7 @@ TEST_CASE("constructors, getters, setters") {
             REQUIRE(vData.getMaxValue()==DBL_MAX);
         }
 
+
         SECTION ("initializer-list constructor") {
             VectorData vData = {1.4,2.2,3.9,4.6,500.00,6.0,7.2345,8.23,9.34,10.23454};
             REQUIRE(vData.getSize() == 10);
