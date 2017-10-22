@@ -314,42 +314,92 @@ string DataCruncher::getSuffixFromString(const string& val_) const {
 
 /* --- getters / setters --- */
 
+/**
+ * DataCruncher::getStatisticValuesAreUpToDate
+ * @brief getter for class member statisticValuesAreUpToDate
+ * @return returns current value of statisticValuesAreUpToDate
+ */
 bool DataCruncher::getStatisticValuesAreUpToDate() const {
     return statisticValuesAreUpToDate;
 }
 
+/**
+ * DataCruncher::setStatisticValuesAreUpToDate
+ * @brief setter for class member statisticValuesAreUpToDate
+ * @param statisticValuesAreUpToDate_ new value for class member statisticValuesAreUpToDate
+ */
 void DataCruncher::setStatisticValuesAreUpToDate(bool statisticValuesAreUpToDate_) {
     statisticValuesAreUpToDate = statisticValuesAreUpToDate_;
 }
 
+/**
+ * DataCruncher::getVariance
+ * @brief getter for class member variance
+ * @return returns current value of variance
+ */
 double DataCruncher::getVariance() const {
     return variance;
 }
 
+/**
+ * DataCruncher::setVariance
+ * @brief setter for class member variance
+ * @param variance_ new value for class member variance
+ */
 void DataCruncher::setVariance(double variance_) {
     variance = variance_;
 }
 
+/**
+ * DataCruncher::getStdDeviation
+ * @brief getter for class member stdDeviation
+ * @return returns current value of stdDeviation
+ */
 double DataCruncher::getStdDeviation() const {
     return stdDeviation;
 }
 
+/**
+ * DataCruncher::setStdDeviation
+ * @brief setter for class member stdDeviation
+ * @param stdDeviation_ new value for class member stdDeviation
+ */
 void DataCruncher::setStdDeviation(double stdDeviation_) {
     stdDeviation = stdDeviation_;
 }
 
+/**
+ * DataCruncher::getMedian
+ * @brief getter for class member median
+ * @return returns current value of median
+ */
 double DataCruncher::getMedian() const {
     return median;
 }
 
+/**
+ * DataCruncher::setMedian
+ * @brief setter for class member median
+ * @param median_ new value for class member median
+ */
 void DataCruncher::setMedian(double median_) {
     median = median_;
 }
 
+/**
+ * DataCruncher::getAverage
+ * @brief getter for class member average
+ * @return returns current value of average
+ */
 double DataCruncher::getAverage() const {
     return average;
 }
 
+/**
+ * DataCruncher::setAverage
+ * @brief setter for class member average
+ * @param average_ new value for class member average
+ */
 void DataCruncher::setAverage(double average_) {
     average = average_;
 }
