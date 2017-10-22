@@ -409,8 +409,9 @@ void DataCruncher::setAverage(double average_) {
 // statistic values
 
 /**
- * @brief DataCruncher::calcAverage
- * @return
+ * DataCruncher::calcAverage
+ * @brief calculates average of values of vData
+ * @return returns average of values of vData
  */
 double DataCruncher::calcAverage() const {
     double average = 0;
@@ -421,22 +422,54 @@ double DataCruncher::calcAverage() const {
     return (double) average/(double) vData.size();
 }
 
+/**
+ * DataCruncher::calcMedian
+ * @brief calculates median of values of vData
+ * @return returns median of values of vData
+ */
 double DataCruncher::calcMedian() const {
     return 0;
 }
 
+/**
+ * DataCruncher::calcStdDeviation
+ * @brief calculates standard deviation of values of vData
+ * @return returns standard deviation of values of vData
+ */
 double DataCruncher::calcStdDeviation() const {
     return 0;
 }
 
+/**
+ * DataCruncher::calcVariance
+ * @brief calculates variance of values of vData
+ * @return returns variance of values of vData
+ */
 double DataCruncher::calcVariance() const {
     return 0;
 }
 
+/**
+ * DataCruncher::calcHistogramm
+ * @brief TODO
+ * @return
+ */
 double DataCruncher::calcHistogramm() const {
     return 0;
 }
 
+/**
+ * DataCruncher::calcAllStatisticValues
+ * @brief this function calculates all statical values and saves them in the member variables
+ *
+ * This function calculates the values for
+ *  - average
+ *  - median
+ *  - standard deviation
+ *  - variance
+ * of the values of vData and saves them directly in the member variables within DataCruncher.
+ * These variables can get used by the getter functions getAverage(), getMedian(), ...
+ */
 void DataCruncher::calcAllStatisticValues() {
     setAverage(calcAverage());
     setMedian(calcMedian());
@@ -469,7 +502,7 @@ VectorData DataCruncher::removeErrors(bool changeLocalVectorData_) {
  * has an average of 0 and an variance of 1.
  * The z-transformation can get used to standardize data of different scales. This makes the data more comparable.
  *
- * Please note : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
+ * PLEASE NOTE : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
  * vData of this class. If changeLocalVectorData_ = false the returned value is a copy of the local member variable vData.
  * In this case vData is not modified.
  */
@@ -512,7 +545,7 @@ VectorData DataCruncher::zTransform(bool changeLocalVectorData_) {
  * @param changeLocalVectorData_ false if this function has to work on a copy of vData, true if it works on the member vData
  * @return returns an VectorData-object with original values before z-transformation
  *
- * Please note : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
+ * PLEASE NOTE : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
  * vData of this class. If changeLocalVectorData_ = false the returned value is a copy of the local member variable vData.
  * In this case vData is not modified.
  */
@@ -546,7 +579,7 @@ VectorData DataCruncher::undoZTransform(double averageBeforeZ_, double stdDeviat
  * @param changeLocalVectorData_ false if this function has to work on a copy of vData, true if it works on the member vData
  * @return returns an VectorData-object with differentiated data of vData
  *
- * Please note : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
+ * PLEASE NOTE : If changeLocalVectorData_ = true (default value) this function modifies the data within the local member variable
  * vData of this class. If changeLocalVectorData_ = false the returned value is a copy of the local member variable vData.
  * In this case vData is not modified.
  */
