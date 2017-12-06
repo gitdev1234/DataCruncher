@@ -200,11 +200,11 @@ string DataCruncher::getSuffixFromString(const string& val_) const {
  * @return
  */
 double DataCruncher::calcAverage() const {
-    double average = 0;
+    double average_ = 0;
     for ( int pos = 0; pos < vData.getSize(); pos++) {
-        average += vData[pos];
+        average_ += vData[pos];
     }
-    return (double) average/(double) vData.size();        
+    return (double) average_/(double) vData.getSize();
 }
 
 
@@ -213,17 +213,17 @@ double DataCruncher::calcAverage() const {
  * @return 
  */
 double DataCruncher::calcMedian() const { 
-    VectorData temparray = vData;
-    double median = 0;
-    int gerade = temparray.size()%2;
-    sort (temparray.begin(), temparray.end());
-    if(gerade>0) {
-        median = (temparray[temparray.size()/2]+temparray[temparray.size()/2+1])/2;
+    VectorData tempvData= vData;
+    double median_ = 0;
+    int even = tempvData.getSize()%2;
+    sort (tempvData.begin(), tempvData.end());
+    if(even>0) {
+        median_ = (tempvData[tempvData.getSize()/2]+tempvData[tempvData.getSize()/2+1])/2;
     }
     else {
-        median = temparray[temparray.size()/2];
+        median_ = tempvData[tempvData.getSize()/2];
     }
-    return (double) median;
+    return (double) median_;
     
 }
 
@@ -233,9 +233,9 @@ double DataCruncher::calcMedian() const {
  * @return 
  */
 double DataCruncher::calcStdDeviation() const {
-    double stddeviation = 0;
-    stddeviation = sqrt(calcVariance());
-    return (double) stddeviation;
+    double stdDeviation_ = 0;
+    stdDeviation_ = sqrt(calcVariance());
+    return (double) stdDeviation_;
 }
 
 
@@ -244,11 +244,11 @@ double DataCruncher::calcStdDeviation() const {
  * @return 
  */
 double DataCruncher::calcVariance() const {
-    double variance = 0;
+    double variance_ = 0;
     for ( int pos = 0; pos < vData.getSize(); pos++) {
-        variance += pow(vData[pos]-calcAverage(),2);
+        variance_ += pow(vData[pos]-calcAverage(),2);
     }
-    return (double) variance/(double) vData.size();
+    return (double) variance_/(double) vData.getSize();
 }
     
 
