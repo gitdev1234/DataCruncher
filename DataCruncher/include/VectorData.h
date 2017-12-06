@@ -30,6 +30,10 @@ class VectorData : public vector<double> {
         // copy - constructor
         VectorData(const VectorData& other_, bool copyVectorData_ = true);
 
+        // initializer - list - contructor
+        VectorData(const initializer_list<double>& val_)
+            : vector<double>(val_) {};
+
         /* --- miscellaneous --- */
         int    getSize       ()            const;
         double getValueAt    (int index_)  const;

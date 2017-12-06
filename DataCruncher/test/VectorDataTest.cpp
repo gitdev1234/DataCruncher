@@ -27,6 +27,93 @@ TEST_CASE("constructors, getters, setters") {
             REQUIRE(vData.getMaxValue()==DBL_MAX);
         }
 
+
+        SECTION ("initializer-list constructor") {
+            VectorData vData = {1.4,2.2,3.9,4.6,500.00,6.0,7.2345,8.23,9.34,10.23454};
+            REQUIRE(vData.getSize() == 10);
+            REQUIRE(vData[0] == 1.4);
+            REQUIRE(vData[1] == 2.2);
+            REQUIRE(vData[2] == 3.9);
+            REQUIRE(vData[3] == 4.6);
+            REQUIRE(vData[4] == 500.00);
+            REQUIRE(vData[5] == 6.0);
+            REQUIRE(vData[6] == 7.2345);
+            REQUIRE(vData[7] == 8.23);
+            REQUIRE(vData[8] == 9.34);
+            REQUIRE(vData[9] == 10.23454);
+            REQUIRE_FALSE(vData.getUseCutOffToRange());
+            REQUIRE(vData.getMinValue()==DBL_MIN);
+            REQUIRE(vData.getMaxValue()==DBL_MAX);
+        }
+
+        // bug-test-case
+        SECTION("ensure no bug : no mismatch of initializer list constructor (with less than 5 arguments) and standard-constructor") {
+
+            SECTION("no elements") {
+                VectorData vData = {};
+                REQUIRE(vData.getSize() == 0);
+                REQUIRE_FALSE(vData.getUseCutOffToRange());
+                REQUIRE(vData.getMinValue()==DBL_MIN);
+                REQUIRE(vData.getMaxValue()==DBL_MAX);
+            }
+
+            SECTION("one element") {
+                VectorData vData = {4.5};
+                REQUIRE(vData.getSize() == 1);
+                REQUIRE(vData[0] == 4.5);
+                REQUIRE_FALSE(vData.getUseCutOffToRange());
+                REQUIRE(vData.getMinValue()==DBL_MIN);
+                REQUIRE(vData.getMaxValue()==DBL_MAX);
+            }
+
+            SECTION("two elements") {
+                VectorData vData = {4.5, 343434.121212};
+                REQUIRE(vData.getSize() == 2);
+                REQUIRE(vData[0] == 4.5);
+                REQUIRE(vData[1] == 343434.121212);
+                REQUIRE_FALSE(vData.getUseCutOffToRange());
+                REQUIRE(vData.getMinValue()==DBL_MIN);
+                REQUIRE(vData.getMaxValue()==DBL_MAX);
+            }
+
+            SECTION("three elements") {
+                VectorData vData = {4.5, 343434.121212, 2.0};
+                REQUIRE(vData.getSize() == 3);
+                REQUIRE(vData[0] == 4.5);
+                REQUIRE(vData[1] == 343434.121212);
+                REQUIRE(vData[2] == 2.0);
+                REQUIRE_FALSE(vData.getUseCutOffToRange());
+                REQUIRE(vData.getMinValue()==DBL_MIN);
+                REQUIRE(vData.getMaxValue()==DBL_MAX);
+            }
+
+            SECTION("four elements") {
+                VectorData vData = {4.5, 343434.121212, 2.0, 2323.1};
+                REQUIRE(vData.getSize() == 4);
+                REQUIRE(vData[0] == 4.5);
+                REQUIRE(vData[1] == 343434.121212);
+                REQUIRE(vData[2] == 2.0);
+                REQUIRE(vData[3] == 2323.1);
+                REQUIRE_FALSE(vData.getUseCutOffToRange());
+                REQUIRE(vData.getMinValue()==DBL_MIN);
+                REQUIRE(vData.getMaxValue()==DBL_MAX);
+            }
+
+            SECTION("five elements") {
+                VectorData vData = {4.5, 343434.121212, 2.0, 2323.1, 999.99999};
+                REQUIRE(vData.getSize() == 5);
+                REQUIRE(vData[0] == 4.5);
+                REQUIRE(vData[1] == 343434.121212);
+                REQUIRE(vData[2] == 2.0);
+                REQUIRE(vData[3] == 2323.1);
+                REQUIRE(vData[4] == 999.99999);
+                REQUIRE_FALSE(vData.getUseCutOffToRange());
+                REQUIRE(vData.getMinValue()==DBL_MIN);
+                REQUIRE(vData.getMaxValue()==DBL_MAX);
+            }
+
+        }
+
         SECTION ("standard constructor with parameters") {
             VectorData vData(10,true,-20,20);
             REQUIRE(vData.getSize()==10);

@@ -30,10 +30,8 @@ class DataCruncher {
         double& operator[](int index_);
 
         /* --- load / save --- */
-        bool loadFromFile(const string& path_,char separator_ = ',');
-        bool saveToFile(const string& path_,char separator_ = ',', int decimalPlaces_ = 2); // TODO const;
-        bool loadFromDataBase();
-        bool saveToDataBase() const;
+        int loadFromFile(const string& path_,char separator_ = ',');
+        int saveToFile(const string& path_,char separator_ = ',', int decimalPlaces_ = 2) const;
 
         /* --- analyze --- */
 
@@ -43,28 +41,56 @@ class DataCruncher {
         double calcStdDeviation() const;
         double calcVariance() const;
         double calcHistogramm() const;
+        void  calcAllStatisticValues();
 
         // analytic values
         double calcFourierTransform() const;
         double calcTaylorSeries() const;
 
         /* --- modify --- */
-        VectorData removeErrors();
-        VectorData zTransform();
-        VectorData differentiate();
-        VectorData integrate();
-        VectorData movingAverageFiltering();
+        VectorData removeErrors(bool changeLocalVectorData_ = true);
+        VectorData zTransform(bool changeLocalVectorData_ = true);
+        VectorData undoZTransform(double averageBeforeZ_, double stdDeviationBeforeZ_, bool changeLocalVectorData_ = true);
+        VectorData differentiate(bool changeLocalVectorData_ = true);
+        VectorData integrate(bool changeLocalVectorData_ = true);
+        VectorData movingAverageFiltering(bool changeLocalVectorData_ = true);
 
         /* --- public members --- */
         VectorData vData;
 
-    private:
+        /* --- getters / setters --- */
+        bool getStatisticValuesAreUpToDate() const;
+        void setStatisticValuesAreUpToDate(bool statisticValuesAreUpToDate_);
+
+        double getAverage() const;
+        void setAverage(double average_);
+
+        double getMedian() const;
+        void setMedian(double median_);
+
+        double getStdDeviation() const;
+        void setStdDeviation(double stdDeviation_);
+
+        double getVariance() const;
+        void setVariance(double variance_);
+
+private:
         /* --- load / save --- */
-        bool loadFromCSVFile(const string& path_, char separator_ = ',');
-        bool saveToCSVFile(const string& path_, char separator_ = ',', int decimalPlaces_ = 2) const;
-        bool loadFromBinaryFile(const string& path_);
-        bool saveToBinaryFile(const string& path_); // TODO const
+        int loadFromCSVFile(const string& path_, char separator_ = ',');
+        int saveToCSVFile(const string& path_, char separator_ = ',', int decimalPlaces_ = 2) const;
+        int loadFromBinaryFile(const string& path_);
+        int saveToBinaryFile(const string& path_) const;
         string getSuffixFromString(const string& val_) const;
+
+        // miscellaneous
+        bool statisticValuesAreUpToDate = false;
+
+        // statistic values of vData
+        double average;
+        double median;
+        double stdDeviation;
+        double variance;
+        //double calcHistogramm() const;        todo
 
 };
 

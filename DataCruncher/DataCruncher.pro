@@ -13,6 +13,8 @@ CONFIG   += console
 CONFIG   -= app_bundle
 #CONFIG   += c++11
 QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += --coverage
+QMAKE_LFLAGS += --coverage
 
 TEMPLATE = app
 
@@ -26,7 +28,8 @@ SOURCES += main.cpp \
     test/VectorDataTest.cpp \
     test/DataCruncherTest.cpp \
     test/MiscellaneousTest.cpp \
-    test/datacruncheranalysetest.cpp
+    test/DataCruncherAnalyseTest.cpp \
+    test/DataCruncherModifyTest.cpp
 
 HEADERS += \
     catch.hpp \

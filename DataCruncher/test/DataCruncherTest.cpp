@@ -49,7 +49,11 @@ TEST_CASE("file operations") {
     DC[2] = 435324.234123464576;
 
     SECTION("do not save path without suffix") {
-        REQUIRE_FALSE(DC.saveToFile("test"));
+        REQUIRE(DC.saveToFile("test") == -3);
+    }
+
+    SECTION("do not load path without suffix") {
+        REQUIRE(DC.loadFromFile("test") == -3);
     }
 
     SECTION("save a *.csv-path to a CSV-file") {
@@ -60,20 +64,20 @@ TEST_CASE("file operations") {
                 case 1 : path = "test.csv"; break;
                 case 2 : path = "test.cSv"; break;
             }
-            REQUIRE(DC.saveToFile(path,',',10));
+            REQUIRE(DC.saveToFile(path,',',10) > 0);
         }
     }
 
     SECTION("load a *.csv-path as a CSV-file") {
         string path;
-        DataCruncher DC2;
         for (int i = 0; i < 3; i++) {
             switch (i)  {
                 case 0 : path = "test.CSV"; break;
                 case 1 : path = "test.csv"; break;
                 case 2 : path = "test.cSv"; break;
             }
-            REQUIRE(DC2.loadFromFile(path));
+            DataCruncher DC2;
+            REQUIRE(DC2.loadFromFile(path) > 0);
             REQUIRE(DC.vData.getSize() == DC2.vData.getSize());
             for (int i2 = 0; i2 < DC.vData.getSize(); i2++) {
                 REQUIRE( DC.vData.nearlyEqual(DC.vData[i2],DC2.vData[i2],TOLERANCE));
@@ -89,20 +93,26 @@ TEST_CASE("file operations") {
                 case 1 : path = "test.TeSt"; break;
                 case 2 : path = "test.12c!"; break;
             }
-            REQUIRE(DC.saveToFile(path));
+            REQUIRE(DC.saveToFile(path) > 0);
         }
     }
 
     SECTION("load any other suffixes as a binary file") {
         string path;
-        DataCruncher DC2;
+
         for (int i = 0; i < 3; i++) {
             switch (i)  {
                 case 0 : path = "test.bin"; break;
                 case 1 : path = "test.TeSt"; break;
                 case 2 : path = "test.12c!"; break;
             }
-            REQUIRE(DC2.loadFromFile(path));
+            DataCruncher DC2;
+            REQUIRE(DC2.loadFromFile(path) > 0);
+            REQUIRE(DC.vData.getSize() == DC2.vData.getSize());
+            for (int i2 = 0; i2 < DC.vData.getSize(); i2++) {
+                REQUIRE( DC.vData.nearlyEqual(DC.vData[i2],DC2.vData[i2],TOLERANCE));
+            }
+
         }
     }
 }

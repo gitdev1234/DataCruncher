@@ -1,2 +1,0 @@
-HalloWelt
-TschüssWelt 
