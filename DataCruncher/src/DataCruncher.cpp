@@ -201,9 +201,54 @@ string DataCruncher::getSuffixFromString(const string& val_) const {
  */
 double DataCruncher::calcAverage() const {
     double average = 0;
-    for ( int pos = 0; pos < vData.size(); pos++) {
+    for ( int pos = 0; pos < vData.getSize(); pos++) {
         average += vData[pos];
     }
-    return (double) average/(double) vData.size();
-
+    return (double) average/(double) vData.size();        
 }
+
+
+/**
+ * @brief DataCruncher::calcMedian
+ * @return 
+ */
+double DataCruncher::calcMedian() const { 
+    VectorData temparray = vData;
+    double median = 0;
+    int gerade = temparray.size()%2;
+    sort (temparray.begin(), temparray.end());
+    if(gerade>0) {
+        median = (temparray[temparray.size()/2]+temparray[temparray.size()/2+1])/2;
+    }
+    else {
+        median = temparray[temparray.size()/2];
+    }
+    return (double) median;
+    
+}
+
+
+/**
+ * @brief DataCruncher::calcStdDeviation
+ * @return 
+ */
+double DataCruncher::calcStdDeviation() const {
+    double stddeviation = 0;
+    stddeviation = sqrt(calcVariance());
+    return (double) stddeviation;
+}
+
+
+/**
+ * @brief DataCruncher::calcVariance
+ * @return 
+ */
+double DataCruncher::calcVariance() const {
+    double variance = 0;
+    for ( int pos = 0; pos < vData.getSize(); pos++) {
+        variance += pow(vData[pos]-calcAverage(),2);
+    }
+    return (double) variance/(double) vData.size();
+}
+    
+
