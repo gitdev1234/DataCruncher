@@ -12,33 +12,136 @@
 #include "catch.hpp"
 #include "DataCruncher.h"
 
-TEST_CASE("Test DataCruncher.calcAverage") {
+TEST_CASE("Test DataCruncher calc analytical values") {
+    const double TOLERANCE = 0.01;
     DataCruncher DC;
 
-    SECTION("calcAverage with integers") {
-        DC.vData = {3,6,-3,5,7,2,1,6};
-        REQUIRE (DC.calcAverage() == 3.375);
 
-        DC.vData = {10000,234235,290294098,2340209,23232346574};
-        REQUIRE (DC.calcAverage() == 4705045023.2);
+    SECTION("calc analytical values with integers") {
+        SECTION("zTransform with small unsigned integers") {
+            DC.vData = {3,6,3,5,7,2,1,6};
+            REQUIRE (DC.calcAverage() == 4.125);
 
-        DC.vData = {-23425234,-7696858,-84863637,-82828374,-4738384};
-        REQUIRE (DC.calcAverage() == -40710497.4);
+            DC.vData = {25};
+            REQUIRE (DC.calcAverage() == 25);
 
-        DC.vData = {25};
-        REQUIRE (DC.calcAverage() == 25);
+            DC.vData = {2, 3, 4};
+            REQUIRE (DC.calcAverage() == 3);
 
-        DC.vData = {2, 3, 4};
-        REQUIRE (DC.calcAverage() == 3);
+            DC.vData = {2, 4, 8, 6, 4, 3, 32, 66, 7, 8, 9, 7, 54};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),16.1538461538462,TOLERANCE));
 
-        DC.vData = {2, 4, 8, 6, 4, 3, 32, 66, 7, 8, 9, 7, 54};
-        const double TOLERANCE = 0.000000001;
-        REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),16.1538461538462,TOLERANCE));
+            DC.vData = {0,0,0,0,0,0,0,0,0,0,0,0,0};
+            REQUIRE (DC.calcAverage() == 0);
+        }
 
-        DC.vData = {0,0,0,0,0,0,0,0,0,0,0,0,0};
-        REQUIRE (DC.calcAverage() == 0);
+        SECTION("calc analytical values with small signed integers") {
+            DC.vData = {-3,-6,-3,-5,-7,-2,-1,-6};
+            REQUIRE (DC.calcAverage() == -4.125);
+
+            DC.vData = {-25};
+            REQUIRE (DC.calcAverage() == -25);
+
+            DC.vData = {-2, -3, -4};
+            REQUIRE (DC.calcAverage() == -3);
+
+            DC.vData = {-2, -4, -8, -6, -4, -3, -32, -66, -7, -8, -9, -7, -54};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),-16.1538461538462,TOLERANCE));
+
+            DC.vData = {-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0};
+            REQUIRE (DC.calcAverage() == 0);
+        }
+
+        SECTION("calc analytical values with small mixed-signed integers") {
+            DC.vData = {3,6,-3,5,7,2,1,6};
+            REQUIRE (DC.calcAverage() == 3.375);
+
+            DC.vData = {-25};
+            REQUIRE (DC.calcAverage() == -25);
+
+            DC.vData = {-2, 3, -4};
+            REQUIRE (DC.calcAverage() == -1);
+
+            DC.vData = {-2, 4, -8, 6, -4, 3, -32, 66, -7, -8, -9, -7, -54};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),-4,TOLERANCE));
+
+            DC.vData = {-0,-0,-0,0,-0,-0,0,-0,0,-0,-0,-0,-0};
+            REQUIRE (DC.calcAverage() == 0);
+
+        }
+
+        SECTION("calc analytical values with big unsigned integers") {
+            DC.vData = {10000,234235,290294098,2340209,23232346574};
+            REQUIRE (DC.calcAverage() == 4705045023.2);
+
+            DC.vData = {2523423423564356};
+            REQUIRE (DC.calcAverage() == 2523423423564356);
+
+            DC.vData = {2234, 3423234234, 423333};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),1141219933.66667,TOLERANCE));
+
+            DC.vData = {2123, 467788, 8543, 62222222, 4345345, 33452456, 3223452, 623452356, 72345235, 845674567, 95678, 75678586, 545678568};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),174357455.307692,TOLERANCE));
+
+        }
+
+        SECTION("calc analytical values with big signed integers") {
+            DC.vData = {-10000,-234235,-290294098,-2340209,-23232346574};
+            REQUIRE (DC.calcAverage() == -4705045023.2);
+
+            DC.vData = {-2523423423564356};
+            REQUIRE (DC.calcAverage() == -2523423423564356);
+
+            DC.vData = {-2234, -3423234234, -423333};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),-1141219933.66667,TOLERANCE));
+
+            DC.vData = {-2123, -467788, -8543, -62222222, -4345345, -33452456, -3223452, -623452356, -72345235, -845674567, -95678, -75678586, -545678568};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),-174357455.307692,TOLERANCE));
+        }
+
+        SECTION("calc analytical values with big mixed-signed integers") {
+            DC.vData = {-10000,234235,290294098,-2340209,-23232346574};
+            REQUIRE (DC.calcAverage() == -4588833690);
+
+            DC.vData = {-2523423423564356};
+            REQUIRE (DC.calcAverage() == -2523423423564356);
+
+            DC.vData = {-2234, 3423234234, -423333};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),1140936222.33333,TOLERANCE));
+
+            DC.vData = {-2123, 467788, -8543, 62222222, -4345345, -33452456, 3223452, 623452356, -72345235, -845674567, -95678, -75678586, -545678568};
+            REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),-68301175.6153846,TOLERANCE));
+        }
+    }
+
+    SECTION("calc analytical values with doubles") {
+            SECTION("calc analytical values with small unsigned doubles") {
+                DC.vData = {3.123,6.0,3.1,5.1234,7.3,2.0,1.134,6.5};
+            }
+
+            SECTION("calc analytical values with small signed doubles") {
+                DC.vData = {-3.123,-6.0,-3.1,-5.1234,-7.3,-2.0,-1.134,-6.5};
+            }
+
+            SECTION("calc analytical values with small mixed-signed doubles") {
+                DC.vData = {-3.123,6.0,-3.1,-5.1234,7.3,-2.0,-1.134,-6.5};
+            }
+
+            SECTION("calc analytical values with big unsigned doubles") {
+                DC.vData = {23425234.234,7696858.22222,84863637.0,82828374.125,4738384.3};
+            }
+
+            SECTION("calc analytical values with big signed integers") {
+                DC.vData = {-23425234.234,-7696858.22222,-84863637.0,-82828374.125,-4738384.3};
+            }
+
+            SECTION("calc analytical values with big mixed-signed integers") {
+                DC.vData = {-23425234.234,-7696858.22222,84863637.0,-82828374.125,4738384.3};
+            }
+
 
     }
+
 
     SECTION("calcAverage with doubles") {
         const double TOLERANCE = 0.00001;
@@ -64,7 +167,6 @@ TEST_CASE("Test DataCruncher.calcAverage") {
         REQUIRE (DC.vData.nearlyEqual(DC.calcAverage(),0,TOLERANCE));
 
     }
-
 
 
 }
