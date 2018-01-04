@@ -414,13 +414,13 @@ void DataCruncher::setAverage(double average_) {
  * @return returns average of values of vData
  */
 double DataCruncher::calcAverage() const {
-    double average = 0;
+    double average_ = 0;
     for ( int pos = 0; pos < vData.getSize(); pos++) {
-        average += vData[pos];
+        average_ += vData[pos];
     }
-
-    return (double) average/(double) vData.size();
+    return (double) average_/(double) vData.getSize();
 }
+
 
 /**
  * DataCruncher::calcMedian
@@ -428,17 +428,20 @@ double DataCruncher::calcAverage() const {
  * @return returns median of values of vData
  */
 double DataCruncher::calcMedian() const {
-    return 0;
+    VectorData tempvData= vData;
+    double median_ = 0;
+    int even = tempvData.getSize()%2;
+    sort (tempvData.begin(), tempvData.end());
+    if(even>0) {
+        median_ = (tempvData[tempvData.getSize()/2]+tempvData[tempvData.getSize()/2+1])/2;
+    }
+    else {
+        median_ = tempvData[tempvData.getSize()/2];
+    }
+    return (double) median_;
+    
 }
 
-/**
- * DataCruncher::calcStdDeviation
- * @brief calculates standard deviation of values of vData
- * @return returns standard deviation of values of vData
- */
-double DataCruncher::calcStdDeviation() const {
-    return 0;
-}
 
 /**
  * DataCruncher::calcVariance
@@ -446,8 +449,25 @@ double DataCruncher::calcStdDeviation() const {
  * @return returns variance of values of vData
  */
 double DataCruncher::calcVariance() const {
-    return 0;
+    double variance_ = 0;
+    for ( int pos = 0; pos < vData.getSize(); pos++) {
+        variance_ += pow(vData[pos]-calcAverage(),2);
+    }
+    return (double) variance_/(double) vData.getSize();
 }
+
+
+/**
+ * DataCruncher::calcStdDeviation
+ * @brief calculates standard deviation of values of vData
+ * @return returns standard deviation of values of vData
+ */
+double DataCruncher::calcStdDeviation() const {
+    double stdDeviation_ = 0;
+    stdDeviation_ = sqrt(calcVariance());
+    return (double) stdDeviation_;
+}
+
 
 /**
  * DataCruncher::calcHistogramm
@@ -638,3 +658,8 @@ VectorData DataCruncher::movingAverageFiltering(bool changeLocalVectorData_) {
 
     }
 }
+
+
+
+    
+
