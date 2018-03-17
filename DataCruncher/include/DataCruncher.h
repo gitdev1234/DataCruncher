@@ -16,6 +16,7 @@
 #include <string>
 #include <fstream>
 #include <stdio.h>
+#include <math.h>
 //---
 #include "VectorData.h"
 
