@@ -498,6 +498,14 @@ void DataCruncher::calcAllStatisticValues() {
     setStatisticValuesAreUpToDate(true);
 }
 
+// analytic values
+
+VectorData DataCruncher::calcDiscreteFourierTransformation() const {
+    int n = vData.getSize();
+    double omega = 2 * M_PI / n;
+
+}
+
 /* --- modify --- */
 /**
  * @brief DataCruncher::removeErrors

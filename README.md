@@ -1,8 +1,8 @@
 # DataCruncher
 **DataCruncher** is an (hopefully) easy to use c++ implementation for processesing array data.
 
-[![Build Status](https://travis-ci.org/gitdev1234/DataCruncher.svg?branch=master)](https://travis-ci.org/gitdev1234/DataCruncher)
-[![Coverage Status](https://coveralls.io/repos/github/gitdev1234/DataCruncher/badge.svg?branch=master)](https://coveralls.io/github/gitdev1234/DataCruncher?branch=master)
+[![Build Status](https://travis-ci.org/mezorian/DataCruncher.svg?branch=master)](https://travis-ci.org/gitdev1234/DataCruncher)
+[![Coverage Status](https://coveralls.io/repos/github/mezorian/DataCruncher/badge.svg?branch=master)](https://coveralls.io/github/gitdev1234/DataCruncher?branch=master)
 
 The DataCruncher project consist out of two main parts:
 1. VectorData class

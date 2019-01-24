@@ -45,7 +45,7 @@ class DataCruncher {
         void  calcAllStatisticValues();
 
         // analytic values
-        double calcFourierTransform() const;
+        VectorData calcDiscreteFourierTransformation() const;
         double calcTaylorSeries() const;
 
         /* --- modify --- */
