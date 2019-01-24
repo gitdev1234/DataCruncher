@@ -1,5 +1,5 @@
 # DataCruncher
-**DataCruncher** is an (hopefully) easy to use c++ implementation for processesing array data.
+**DataCruncher** is an (hopefully) easy to use c++ implementation for processesing array data. 
 
 [![Build Status](https://travis-ci.org/mezorian/DataCruncher.svg?branch=master)](https://travis-ci.org/mezorian/DataCruncher)
 [![Coverage Status](https://coveralls.io/repos/github/mezorian/DataCruncher/badge.svg?branch=master)](https://coveralls.io/github/mezorian/DataCruncher?branch=master)
