@@ -20,6 +20,6 @@ The test-documentation can be found within the [**docs**](https://github.com/git
 The test-code can be found within the [**test**](https://github.com/gitdev1234/DataCruncher/tree/master/DataCruncher/test) folder.
 
 ## Programming style
-* !Attention! Please note that this project is developed as a C++ - beginner - project. Therefore the design, syntax and the programming style might not be perfect. *
+*!Attention! Please note that this project is developed as a C++ - beginner - project. Therefore the design, syntax and the programming style might not be perfect.*
 
 The code of this project is based on a styleguide which can be found within the [**docs**](https://github.com/gitdev1234/DataCruncher/tree/master/DataCruncher/docs) folder.
